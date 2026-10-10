@@ -134,6 +134,7 @@
       let v = RUN(api, p.expr);
       if (isA(pre) && isA(v) && v.length < pre.length) v = v.concat(pre.slice(v.length));
       if (isA(pre) && !isA(v) && typeof v === "number" && p.type !== PVT.OneD) throw new Error("expression returned a number for a " + pre.length + "D property");
+      if (p.type === PVT.TEXT_DOCUMENT && (typeof v === "string" || typeof v === "number")) return String(v);
       if (v === undefined || (typeof v === "number" && isNaN(v)) || (isA(v) && v.some((x) => typeof x !== "number" || isNaN(x)))) throw new Error("expression result is not a number: " + JSON.stringify(v));
       return v;
     } catch (e) {
@@ -310,7 +311,9 @@
     return `400 ${doc.fontSize}px Arial`;
   }
   function textLayout(L, t) {
-    const doc = val(kid(L._g("ADBE Text Properties"), "ADBE Text Document"), t);
+    const dp = kid(L._g("ADBE Text Properties"), "ADBE Text Document");
+    let doc = val(dp, t);
+    if (typeof doc === "string" || typeof doc === "number") doc = Object.assign({}, keyed(dp, t), { text: String(doc) });   // Source Text expression returning a string
     MCV.font = fontCss(doc); MCV.letterSpacing = "0px";
     const fs = doc.fontSize, track = (doc.tracking / 1000) * fs, lead = doc.autoLeading ? fs * 1.2 : doc.leading || fs * 1.2;
     const lines = String(doc.allCaps ? doc.text.toUpperCase() : doc.text).split(/\r\n|\r|\n/), just = JUST[doc.justification] || "left";
