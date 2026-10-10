@@ -36,7 +36,7 @@ There's no voice-over. A marker at 0:00 says where your music goes, and each sce
 ## How it's built (all editable)
 - **Camera:** each scene comp has a two-node `CAMERA` with depth of field. The focus follows the cards, and Aperture is linked to the **Depth blur** slider.
 - **STYLE CONTROLS:** a layer in every scene comp with **Shadow %, Glow %, Sweep %, Camera move %** and **Depth blur**.
-- **Glass panels:** a `4-Color Gradient` body, a rim that fades downward (`Gradient Ramp` on a stroke), and a light sweep (a blurred band in Add mode, alpha-matted to the panel).
+- **Glass panels:** a `4-Color Gradient` body, a rim that fades downward (`Gradient Ramp` on a stroke), and a CC Light Sweep on the body.
 - **Glows:** a zero-distance `Drop Shadow` named "Glow halo". **Shadows:** a near-black "Shadow tight" plus "Shadow wide".
 - **Easing:** CALM (70/70) for the camera and fades, EXPO (30 → 100) for entrances. There's no overshoot anywhere.
 - **Transitions:** each scene layer in `AURELO_MAIN` fades over 0.8 s with a soft blur and scale. To change one, drag the keys on that layer.
