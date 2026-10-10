@@ -138,3 +138,26 @@ LOOK.camera = function (comp, o) {
     AEL.expr(C.property("ADBE Camera Aperture"), LOOK.ref("Depth blur"));
     return cam;
 };
+
+// CC Light Sweep, set up like the user's AP Automation project: Direction -30, Sharp, Width 142, Sweep Intensity 186,
+// Edge Intensity 50, Edge Thickness 20, coloured light, Reception Add. Center travels from p0 to p1 (layer space) between t0 and t1.
+// o: {p0, p1, t0, t1, color, width, intensity, dir, ctl (expression for Sweep %)}. Params are found by index and checked by name.
+LOOK.ccSweep = function (layer, o) {
+    var f = N3.fx(layer, "CC Light Sweep", o.name || "Light sweep"), nm = f.name, P = function (i, n) {
+        var fx = layer.property("ADBE Effect Parade").property(nm), q = fx.property(i);
+        if (q.name !== n) { q = fx.property(n); }
+        if (!q) { throw new Error("CC Light Sweep: no parameter '" + n + "'"); }
+        return q;
+    };
+    P(2, "Direction").setValue(o.dir === undefined ? -30 : o.dir);
+    P(3, "Shape").setValue(3);                                   // Sharp
+    P(4, "Width").setValue(o.width || 142);
+    P(5, "Sweep Intensity").setValue(o.intensity || 186);
+    P(6, "Edge Intensity").setValue(50);
+    P(7, "Edge Thickness").setValue(20);
+    P(8, "Light Color").setValue(N3.rgba(o.color || "#FFFFFF"));
+    P(9, "Light Reception").setValue(1);                         // Add
+    LOOK.key(P(1, "Center"), o.t0, o.t1, o.p0, o.p1, LOOK.CALM);
+    if (o.ctl) { AEL.expr(P(5, "Sweep Intensity"), "value * " + o.ctl + " / 100"); }
+    return layer.property("ADBE Effect Parade").property(nm);
+};

@@ -89,12 +89,14 @@ LAB.SCENES.push({ id: "09", T: 11.8, build: function () {
 LAB.SCENES.push({ id: "10", T: 12.0, build: function () {
     var S = LAB.scene("10", "End", 12.0, { from: { pos: [960, 540, -2900], poi: [960, 540, 0] }, to: { pos: [960, 540, -2560], poi: [960, 540, 0] } }),
         M = S.comp.name, g = LAB.group(S, "End", 1500, 760, { z: 0 }), c, h;
-    LAB.logo(g.ctx, { cx: -250, cy: -150, d: 150, fs: 150, t: 0.4, main: M });
+    h = LAB.logo(g.ctx, { cx: -250, cy: -150, d: 150, fs: 150, t: 0.4, main: M });
+    LOOK.ccSweep(h.word, { p0: [-120, -55], p1: [600, -55], t0: 2.0, t1: 3.2, color: "#B9C4FF", width: 150, ctl: LOOK.refIn(M, "Sweep %") });
     h = LAB.text(g.ctx, "Calm work, done.", { name: "Line", x: 0, top: 10, fs: 54, wt: 600, align: "center", color: LAB.P.mute });
     N3.unitReveal(h, { times: [1.8], based: "words", stagger: 0.14, dy: 26, blur: 10, lin: 0.7 });
     c = LAB.pill(g.ctx, "Start free", { name: "CTA", cx: 0, top: 140, fs: 30, padX: 34, padY: 16, bg: LAB.P.violet, t: 2.8, soft: 60, level: 210, main: M });
     AEL.expr(c.bg.property("ADBE Effect Parade").property("Glow halo").property("ADBE Drop Shadow-0002"),
         "// breathing glow after it lands\nvar b = value * " + LOOK.refIn(M, "Glow %") + " / 100;\ntime < 3.4 ? b : b * (0.75 + 0.25 * Math.sin((time - 3.4) * 2.4))");
+    LOOK.ccSweep(c.bg, { p0: [-160, 0], p1: [160, 0], t0: 3.6, t1: 4.6, color: "#E2DBFF", width: 90, ctl: LOOK.refIn(M, "Sweep %") });
     h = LAB.text(g.ctx, "Web \u00B7 Mac \u00B7 iOS", { name: "Platforms", x: 0, top: 250, fs: 20, color: LAB.P.dim, align: "center" });
     N3.show(h, 3.6, null, 10, { lin: 0.6 });
     return S;

@@ -25,6 +25,14 @@ There's no voice-over. A marker at 0:00 says where your music goes, and each sce
 | 09 | 1:37 | Results | Three numbers on a curved wall of glass cards |
 | 10 | 1:48 | End | Logo, line, a "Start free" button with a breathing glow |
 
+## Version 2 (from your notes doc)
+- **Light sweeps** use the real **CC Light Sweep**, set up the way you do it: Direction −30°, Sharp, Width ~142, Sweep Intensity 186, Edge Intensity 50, Edge Thickness 20, coloured light, Reception Add, with Center animated across the layer. It's on the panels, tiles, prompt bubble, answer card, first task row, logo ring, wordmark and the Start free button. Sweep % on STYLE CONTROLS scales the intensity.
+- **Gradient Ramp** goes diagonally from the accent colour to a lighter tint on the pills and stat tiles.
+- **Null rigs**, as in your AP Automation timeline: scenes 04–06 have a `RIG ...` null holding the tilted panel. Stat tiles, chart cards, the prompt, the answer card, the pills and the task rows are separate 3D layers parented to it.
+  - Each one is lifted toward the camera (z −40 to −140) and cascades in 0.1 s apart. It rises from behind the panel (z +260) and fades in.
+  - Callouts also tilt in through Orientation.
+  - The rig itself does the big move (rise and un-tilt), and the camera adds a slow dolly on top.
+
 ## How it's built (all editable)
 - **Camera:** each scene comp has a two-node `CAMERA` with depth of field. The focus follows the cards, and Aperture is linked to the **Depth blur** slider.
 - **STYLE CONTROLS:** a layer in every scene comp with **Shadow %, Glow %, Sweep %, Camera move %** and **Depth blur**.

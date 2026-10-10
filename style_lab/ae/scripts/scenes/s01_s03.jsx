@@ -44,15 +44,11 @@ LAB.SCENES.push({ id: "02", T: 12.8, build: function () {
 // 03 Reveal (10.8 s): the ring draws, the wordmark rises, a light sweep crosses it, tagline.
 LAB.SCENES.push({ id: "03", T: 10.8, build: function () {
     var S = LAB.scene("03", "Reveal", 10.8, { from: { pos: [960, 540, -2950], poi: [960, 540, 0] }, to: { pos: [960, 530, -2500], poi: [960, 540, 0] } }),
-        g = LAB.group(S, "Logo", 1500, 420, { z: 0 }), M = S.comp.name, lg, mt, band;
+        g = LAB.group(S, "Logo", 1500, 420, { z: 0 }), M = S.comp.name, lg;
     lg = LAB.logo(g.ctx, { cx: -250, cy: 0, d: 150, fs: 150, t: 0.6, main: M });
-    // light sweep across the wordmark: a blurred band matted to a copy of the wordmark
-    mt = LAB.text(g.ctx, "aurelo", { name: "Wordmark sweep matte", x: -250 + 150 * 0.75, cy: 0, fs: 150, wt: 700, ls: -0.04 });
-    band = N3.box(g.ctx, { name: "Wordmark sweep", cx: -200, cy: 0, w: 90, h: 360, fill: "#FFFFFF" });
-    N3.xf(band, "ADBE Rotate Z").setValue(20); LOOK.boxBlur(band, 26, "Sweep softness"); band.blendingMode = BlendingMode.ADD;
-    N3.xf(band, "ADBE Opacity").setValue(80);
-    LOOK.key(N3.pos(band), 2.8, 4.0, N3.P(g.ctx, -220, 0), N3.P(g.ctx, 520, 0), LOOK.CALM);
-    mt.moveBefore(band); AEL.trackMatte(band, mt, TrackMatteType.ALPHA);
+    // CC Light Sweep across the wordmark (text layer space: x from 0 to ~440, baseline at 0)
+    LOOK.ccSweep(lg.word, { p0: [-120, -55], p1: [600, -55], t0: 2.8, t1: 4.0, color: "#B9C4FF", width: 150, ctl: LOOK.refIn(M, "Sweep %") });
+    LOOK.ccSweep(lg.ring, { p0: [-160, 0], p1: [160, 0], t0: 2.6, t1: 3.6, color: "#BDF4FF", width: 80, ctl: LOOK.refIn(M, "Sweep %"), name: "Ring sweep" });
     LAB.headline(S, "One calm workspace for your team.", { top: 150, fs: 42, wt: 500, t: 3.4, stagger: 0.1, to: LAB.P.mute, z: -100 });
     return S;
 } });

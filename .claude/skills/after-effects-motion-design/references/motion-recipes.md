@@ -142,3 +142,15 @@ Use `add()/sub()/mul()` for array maths in expressions (safe in both expression 
 // Gentle float (justify any wiggle: small amplitude, low frequency)
 "value + [0, Math.sin(time * 1.2) * 6]"
 ```
+
+
+## UI in 3D: null rig + lifted cascade + CC Light Sweep (from the user's AP Automation project)
+- **Rig:** a 3D null (anchor 0,0,0) holds the tilted base panel. Every card or row is its own collapsed 3D precomp, parented to the rig at a local offset with z < 0 (lifted 40–140 px toward the camera). The rig carries the big move (rise and un-tilt with an EXPO ease) and the camera adds a slow dolly.
+- **Cascade:** rows come from z +260 (behind the panel, so the panel hides them) to their lifted z, 0.1 s (2–3 frames) apart, with opacity 0→100 over the first ~45%. Optionally Orientation X −20→0. Lower rows sit lower and softer (opacity 60).
+- **CC Light Sweep** (find parameters by index, then check the name):
+  - Direction −30°, Shape 3 (Sharp), Width ~142.
+  - Sweep Intensity 186, Edge Intensity 50, Edge Thickness 20.
+  - Light Color tinted, Light Reception 1 (Add).
+  - Center animated ±0.8 × the layer width over ~1.2 s with a CALM ease.
+- **Gradient Ramp on UI:** accent → white, diagonal across the element (the user's: teal at the top-left → white at the bottom-right).
+- Rig positions are comp coordinates (the frame centre is 960, 540). Forgetting the +540 on y puts everything off the top of the frame.

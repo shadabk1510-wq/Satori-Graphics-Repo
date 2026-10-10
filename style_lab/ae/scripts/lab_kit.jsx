@@ -83,6 +83,11 @@ LAB.pop = function (layer, t, d) {
 };
 
 // ---------------------------------------------------------------- elements
+LAB.mix = function (a, b, u) {   // blend two hex colours
+    var x = N3.hex(a), y = N3.hex(b), i, o = "#", h;
+    for (i = 0; i < 3; i++) { h = Math.round((x[i] + (y[i] - x[i]) * u) * 255).toString(16); o += h.length < 2 ? "0" + h : h; }
+    return o.toUpperCase();
+};
 LAB.text = function (ctx, str, o) { o.color = o.color || LAB.P.white; return N3.text(ctx, str, o); };
 LAB.grad = function (layer, fs, c0, c1) { return LOOK.ramp(layer, [0, -fs], c0 || LAB.P.white, [0, fs * 0.25], c1 || "#B9C2FF", "Gradient text"); };
 // Headline in the scene comp: gradient text, blur-in per word, 3D at z (default -200, in front of the cards).
@@ -96,12 +101,43 @@ LAB.headline = function (S, str, o) {   // o.flat: stays 2D (drawn over the 3D s
 };
 // Dark glass panel: gradient body (92%), rim fading down, optional light sweep (Add). o: {name, cx, cy, w, h, r, tSweep, main}
 LAB.panel = function (ctx, o) {
-    var body = LOOK.glassCard(ctx, { name: o.name, cx: o.cx || 0, cy: o.cy || 0, w: o.w, h: o.h, r: o.r || 28, rim: "#C9D0FF",
-        colors: o.colors || [LAB.P.gTL, LAB.P.gTR, LAB.P.gBL, LAB.P.gBR], tSweep: o.tSweep, sweepCtl: o.main ? LOOK.refIn(o.main, "Sweep %") : null }), sw;
+    var cx = o.cx || 0, cy = o.cy || 0, body = LOOK.glassCard(ctx, { name: o.name, cx: cx, cy: cy, w: o.w, h: o.h, r: o.r || 28, rim: "#C9D0FF",
+        colors: o.colors || [LAB.P.gTL, LAB.P.gTR, LAB.P.gBL, LAB.P.gBR] });
     N3.xf(body, "ADBE Opacity").setValue(o.opacity || 94);
-    sw = ctx.comp.layer(o.name + " sweep");
-    if (sw) { sw.blendingMode = BlendingMode.ADD; }
+    if (o.tSweep !== undefined && o.tSweep !== null) { LAB.sweep(body, o.w, o.tSweep, o.main, o.sweepColor); }
     return body;
+};
+// CC Light Sweep across a layer whose content is centred on its anchor (w = content width).
+LAB.sweep = function (layer, w, t, main, color) {
+    return LOOK.ccSweep(layer, { p0: [-w * 0.8, 0], p1: [w * 0.8, 0], t0: t, t1: t + 1.2, color: color || "#9FB0FF",
+        width: Math.max(90, Math.min(200, w * 0.12)), ctl: main ? LOOK.refIn(main, "Sweep %") : LOOK.ref("Sweep %") });
+};
+// Control null for a group of 3D layers (like the template's Null 114): anchor at 0 so children use plain offsets.
+LAB.rig = function (S, name, o) {
+    var n = S.comp.layers.addNull(S.T);
+    o = o || {};
+    n.name = name; n.threeDLayer = true; n.label = 2;
+    N3.xf(n, "ADBE Anchor Point").setValue([0, 0, 0]);
+    N3.pos(n).setValue([960 + (o.x || 0), 540 + (o.y || 0), o.z || 0]);
+    if (o.rx) { N3.xf(n, "ADBE Rotate X").setValue(o.rx); }
+    if (o.ry) { N3.xf(n, "ADBE Rotate Y").setValue(o.ry); }
+    return n;
+};
+// Put a group under a rig at a local offset [x, y, z] (z < 0 = lifted toward the camera).
+LAB.attach = function (g, rig, off) {
+    N3.parent(g.layer, rig);
+    N3.pos(g.layer).setValue([off[0], off[1], off[2] || 0]);
+    N3.xf(g.layer, "ADBE Rotate X").setValue(0); N3.xf(g.layer, "ADBE Rotate Y").setValue(0);
+    return g.layer;
+};
+// Cascade in like the template's invoice rows: rise from behind the panel (z + depth) to the lifted z, fade in fast.
+LAB.lift = function (layer, t, o) {
+    var p = N3.pos(layer), v = p.value, d;
+    o = o || {}; d = o.dur || 0.7;
+    LOOK.key(p, t, t + d, [v[0], v[1] + (o.dy || 0), v[2] + (o.depth === undefined ? 260 : o.depth)], v, LOOK.EXPO);
+    LOOK.key(N3.xf(layer, "ADBE Opacity"), t, t + d * 0.45, 0, o.op || 100, LOOK.CALM);
+    if (o.tilt) { LOOK.key(N3.xf(layer, "ADBE Orientation"), t, t + d * 1.1, [o.tilt, 0, 0], [0, 0, 0], LOOK.EXPO); }
+    return layer;
 };
 // Brand shadow for 3D groups on dark: tight + wide near-black.
 LAB.shadow = function (layer) {
@@ -117,6 +153,7 @@ LAB.glow = function (layer, color, soft, t, level, main) {
 // Pill with a glow. o: {name, x|cx, top|cy, fs, bg, color, glow, t, main}
 LAB.pill = function (ctx, str, o) {
     var c = N3.chip(ctx, str, { name: o.name, x: o.x, cx: o.cx, top: o.top, cy: o.cy, fs: o.fs || 18, wt: 600, bg: o.bg || LAB.P.violet, color: o.color || LAB.P.white, padX: o.padX || 18, padY: o.padY || 9 });
+    LOOK.ramp(c.bg, [-80, -30], o.bg || LAB.P.violet, [120, 40], LAB.mix(o.bg || LAB.P.violet, "#FFFFFF", 0.35), "Gradient Ramp");
     if (o.glow !== false) { LAB.glow(c.bg, o.bg || LAB.P.violet, o.soft || 40, o.t, o.level || 170, o.main); }
     if (o.t !== null && o.t !== undefined) { N3.show(c.bg, o.t, null, 12, { lin: 0.5, blur: 8 }); N3.show(c.text, o.t, null, 12, { lin: 0.5, blur: 8 }); }
     return c;

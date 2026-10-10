@@ -61,6 +61,11 @@ const EFFECTS = {
     L("ADBE 4ColorGradient-0007", "Point 4", T.TwoD_SPATIAL, [1728, 972]), L("ADBE 4ColorGradient-0008", "Color 4", T.COLOR, [0, 0, 1, 1]),
     L("ADBE 4ColorGradient-0009", "Blend", T.OneD, 100), L("ADBE 4ColorGradient-0010", "Jitter", T.OneD, 0), L("ADBE 4ColorGradient-0011", "Opacity", T.OneD, 100),
     L("ADBE 4ColorGradient-0012", "Blending Mode", T.OneD, 1)]],
+  // CC Light Sweep: param order as in the Effect Controls panel (Shape 1 Linear / 2 Smooth / 3 Sharp; Reception 1 Add / 2 Composite / 3 Cutout)
+  "CC Light Sweep": ["CC Light Sweep", [L("CC Light Sweep-0001", "Center", T.TwoD_SPATIAL, [960, 540]), L("CC Light Sweep-0002", "Direction", T.OneD, -30),
+    L("CC Light Sweep-0003", "Shape", T.OneD, 1), L("CC Light Sweep-0004", "Width", T.OneD, 50), L("CC Light Sweep-0005", "Sweep Intensity", T.OneD, 50),
+    L("CC Light Sweep-0006", "Edge Intensity", T.OneD, 100), L("CC Light Sweep-0007", "Edge Thickness", T.OneD, 1), L("CC Light Sweep-0008", "Light Color", T.COLOR, [1, 1, 1, 1]),
+    L("CC Light Sweep-0009", "Light Reception", T.OneD, 1)]],
   "ADBE Box Blur2": ["Box Blur", [L("ADBE Box Blur2-0001", "Blur Radius", T.OneD, 0), L("ADBE Box Blur2-0002", "Iterations", T.OneD, 3),
     L("ADBE Box Blur2-0003", "Blur Dimensions", T.OneD, 1), L("ADBE Box Blur2-0004", "Repeat Edge Pixels", T.OneD, 0)]],
   "ADBE Fractal Noise": ["Fractal Noise", [L("ADBE Fractal Noise-0001", "Fractal Type", T.OneD, 1), L("ADBE Fractal Noise-0002", "Noise Type", T.OneD, 1),

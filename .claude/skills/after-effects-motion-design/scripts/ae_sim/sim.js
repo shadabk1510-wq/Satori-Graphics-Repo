@@ -456,6 +456,16 @@
         g = b.createLinearGradient(mid[0], mid[1], low[0], low[1]); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,1)");
         b.globalCompositeOperation = "destination-in"; b.fillStyle = g; b.fillRect(0, 0, W, H);
         a.drawImage(bot, 0, 0); fillOver(buf, (x) => x.drawImage(top, 0, 0)); relCv(top); relCv(bot);
+      } else if (f.mn === "CC Light Sweep") {   // approximation: an additive band (sharp core + soft falloff) inside the layer's alpha
+        const g = (n) => val(f.kids[n - 1], t), c = M.transformPoint(new DOMPoint(g(1)[0], g(1)[1])), dir = (g(2) * Math.PI) / 180, w = g(4) * mScale(M), k = Math.min(1.5, g(5) / 100), col = g(8);
+        if (k > 0.01) fillOver(buf, (x) => {
+          const nx = Math.cos(dir), ny = Math.sin(dir), gr = x.createLinearGradient(c.x - nx * w, c.y - ny * w, c.x + nx * w, c.y + ny * w), cs = (a) => rgba(col, Math.min(1, a * k));
+          gr.addColorStop(0, cs(0)); gr.addColorStop(g(3) === 3 ? 0.42 : 0.2, cs(0.25)); gr.addColorStop(0.5, cs(0.9)); gr.addColorStop(g(3) === 3 ? 0.58 : 0.8, cs(0.25)); gr.addColorStop(1, cs(0));
+          x.globalCompositeOperation = "lighter"; x.fillStyle = gr;
+          // fillOver already clips to the layer (source-atop); "lighter" inside it needs a mask pass
+          const tmp = getCv(), y = tmp.getContext("2d"); y.fillStyle = gr; y.fillRect(0, 0, W, H); y.globalCompositeOperation = "destination-in"; y.drawImage(buf, 0, 0);
+          x.drawImage(tmp, 0, 0); relCv(tmp);
+        });
       } else if (f.mn === "ADBE Ramp" && L.kind !== "solid") {
         const tp = (q) => { const r = M.transformPoint(new DOMPoint(q[0], q[1])); return [r.x, r.y]; }, p0 = tp(val(kid(f, "ADBE Ramp-0001"), t)), p1 = tp(val(kid(f, "ADBE Ramp-0003"), t));
         fillOver(buf, (x) => { const g = x.createLinearGradient(p0[0], p0[1], p1[0], p1[1]); g.addColorStop(0, rgba(val(kid(f, "ADBE Ramp-0002"), t))); g.addColorStop(1, rgba(val(kid(f, "ADBE Ramp-0004"), t))); x.fillStyle = g; x.fillRect(0, 0, W, H); });
