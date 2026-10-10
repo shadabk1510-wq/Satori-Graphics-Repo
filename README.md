@@ -1,0 +1,34 @@
+# Satori Graphics: motion design with After Effects scripts
+
+After Effects projects built as native, editable layers from ExtendScript (`.jsx`), plus the Claude Code skill and tools behind them.
+
+## Layout
+
+| Folder | What it is |
+|---|---|
+| `.claude/skills/after-effects-motion-design/` | The skill: workflow, AE scripting reference, motion recipes, the SFX workflow, `ae_sim` (a strict AE model plus a preview renderer), SFX tools, and `export_template.jsx` |
+| `noon_ae/` | **NOON**, the 11-minute design-tutorial video (delivered). The build is `ae/scripts/build_noon3.jsx`; the docs are in `docs/NOON3_AE.md` |
+| `noon_ae/ae/scripts/add_sfx.jsx` + `sfx/` | NOON sound effects: 190 cues from the build timings, run on the finished project |
+| `noon_ae/ae/scripts/style/` | NOON style test: the glass look and 3D camera on one moment (8:22) |
+| `style_lab/` | **Aurelo** style lab: a separate 2-minute test film (fictional app) for the new look. See `style_lab/README.md` |
+
+Client assets, voice-overs, renders and package zips are kept out of git (see `.gitignore`).
+
+## Where things stand
+- **NOON:** delivered, SFX added. Client changes, if any, come later.
+- **Style lab v2:**
+  - built with CC Light Sweep using the user's settings, Gradient Ramps on UI, null rigs with lifted, cascading rows, and a two-node camera with depth of field;
+  - waiting on the user's render and feedback.
+- **Next:** match the user's own style (pacing, design and 3D moves). The inputs will be:
+  - their finished projects exported with `export_template.jsx`, run with no comp open so it exports every comp;
+  - each project's render and voice-over;
+  - a cheat sheet of their rules.
+
+  Turn these into a house-style section in the skill.
+- **ElevenLabs:** the restricted connector is connected (SFX, TTS, transcription; no music). Credit rules are in the skill's `references/sfx-workflow.md` § 7.
+
+## Working rules
+- Develop on `claude/after-effects-code-skills-bh5k75`; commit and push every change.
+- Check every build in `ae_sim` before delivery: `node model.mjs build.jsx out.json`, then `node render.mjs out.json --comp NAME --times ...`.
+- Write non-ASCII in JSX as `\uXXXX`. In expressions, use `add()` / `sub()` / `mul()` for array math.
+- The user is careful with credits: keep checks light, and ask before long generations or renders.
