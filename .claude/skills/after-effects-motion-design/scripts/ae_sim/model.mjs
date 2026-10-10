@@ -55,6 +55,14 @@ const EFFECTS = {
   "ADBE Ramp": ["Gradient Ramp", [L("ADBE Ramp-0001", "Start of Ramp", T.TwoD_SPATIAL, [0, 0]), L("ADBE Ramp-0002", "Start Color", T.COLOR, [1, 1, 1, 1]),
     L("ADBE Ramp-0003", "End of Ramp", T.TwoD_SPATIAL, [0, 100]), L("ADBE Ramp-0004", "End Color", T.COLOR, [0, 0, 0, 1]), L("ADBE Ramp-0005", "Ramp Shape", T.OneD, 1),
     L("ADBE Ramp-0006", "Ramp Scatter", T.OneD, 0), L("ADBE Ramp-0007", "Blend With Original", T.OneD, 0)]],
+  "ADBE 4ColorGradient": ["4-Color Gradient", [L("ADBE 4ColorGradient-0001", "Point 1", T.TwoD_SPATIAL, [192, 108]), L("ADBE 4ColorGradient-0002", "Color 1", T.COLOR, [1, 1, 0, 1]),
+    L("ADBE 4ColorGradient-0003", "Point 2", T.TwoD_SPATIAL, [1728, 108]), L("ADBE 4ColorGradient-0004", "Color 2", T.COLOR, [0, 1, 0, 1]),
+    L("ADBE 4ColorGradient-0005", "Point 3", T.TwoD_SPATIAL, [192, 972]), L("ADBE 4ColorGradient-0006", "Color 3", T.COLOR, [1, 0, 1, 1]),
+    L("ADBE 4ColorGradient-0007", "Point 4", T.TwoD_SPATIAL, [1728, 972]), L("ADBE 4ColorGradient-0008", "Color 4", T.COLOR, [0, 0, 1, 1]),
+    L("ADBE 4ColorGradient-0009", "Blend", T.OneD, 100), L("ADBE 4ColorGradient-0010", "Jitter", T.OneD, 0), L("ADBE 4ColorGradient-0011", "Opacity", T.OneD, 100),
+    L("ADBE 4ColorGradient-0012", "Blending Mode", T.OneD, 1)]],
+  "ADBE Box Blur2": ["Box Blur", [L("ADBE Box Blur2-0001", "Blur Radius", T.OneD, 0), L("ADBE Box Blur2-0002", "Iterations", T.OneD, 3),
+    L("ADBE Box Blur2-0003", "Blur Dimensions", T.OneD, 1), L("ADBE Box Blur2-0004", "Repeat Edge Pixels", T.OneD, 0)]],
   "ADBE Fractal Noise": ["Fractal Noise", [L("ADBE Fractal Noise-0001", "Fractal Type", T.OneD, 1), L("ADBE Fractal Noise-0002", "Noise Type", T.OneD, 1),
     L("ADBE Fractal Noise-0004", "Contrast", T.OneD, 100), L("ADBE Fractal Noise-0005", "Brightness", T.OneD, 0), L("ADBE Fractal Noise-0023", "Evolution", T.OneD, 0)]],
   "ADBE Tint": ["Tint", [L("ADBE Tint-0001", "Map Black To", T.COLOR, [0, 0, 0, 1]), L("ADBE Tint-0002", "Map White To", T.COLOR, [1, 1, 1, 1]), L("ADBE Tint-0003", "Amount to Tint", T.OneD, 100)]],
@@ -82,6 +90,13 @@ const ADDABLE = { vector: (mn) => VECTOR_ITEMS[mn] && VECTOR_ITEMS[mn](), effect
   animator: (mn) => mn === "ADBE Text Animator" && ANIMATOR(), selector: (mn) => SELECTORS[mn] && SELECTORS[mn](), animprop: (mn) => ANIM_PROPS[mn],
   mask: (mn) => mn === "ADBE Mask Atom" && MASK(),
   dash: (mn) => ({ "ADBE Vector Stroke Dash 1": L(mn, "Dash", T.OneD, 10), "ADBE Vector Stroke Gap 1": L(mn, "Gap", T.OneD, 10), "ADBE Vector Stroke Offset": L(mn, "Offset", T.OneD, 0) })[mn] };
+// 3D layers gain Orientation and X/Y Rotation (Rotation becomes "Z Rotation"); cameras have no Effects/Masks.
+const XYZ_ROT = () => [L("ADBE Orientation", "Orientation", T.ThreeD_SPATIAL, [0, 0, 0]), L("ADBE Rotate X", "X Rotation", T.OneD, 0), L("ADBE Rotate Y", "Y Rotation", T.OneD, 0)];
+const CAMERA = (c, zoom) => G("root", "root", [G("ADBE Marker", "Marker", null, { marker: true }),
+  G("ADBE Transform Group", "Transform", [L("ADBE Anchor Point", "Point of Interest", T.ThreeD_SPATIAL, [c[0], c[1], 0]), L("ADBE Position", "Position", T.ThreeD_SPATIAL, [c[0], c[1], -zoom]),
+    ...XYZ_ROT(), L("ADBE Rotate Z", "Z Rotation", T.OneD, 0)]),
+  G("ADBE Camera Options Group", "Camera Options", [L("ADBE Camera Zoom", "Zoom", T.OneD, zoom), L("ADBE Camera Depth of Field", "Depth of Field", T.OneD, 0),
+    L("ADBE Camera Focus Distance", "Focus Distance", T.OneD, zoom), L("ADBE Camera Aperture", "Aperture", T.OneD, 25.3), L("ADBE Camera Blur Level", "Blur Level", T.OneD, 100)])]);
 const AUDIO = G("ADBE Audio Group", "Audio", [L("ADBE Audio Levels", "Audio Levels", T.TwoD, [0, 0])]);
 const layerSchema = (kind) => {
   // audio-only layers have no Transform or Masks in AE
@@ -299,6 +314,8 @@ class CompItem extends Item {
     const self = this;
     this.layers = {
       addText: (t) => { const l = new Layer(self, String(t === undefined ? "" : t).substr(0, 30) || "Text", "text"); const d0 = new TextDocument(t === undefined ? "" : t); l.property("ADBE Text Properties").property("ADBE Text Document")._value = d0; return l._ins(); },
+      addCamera: (name, c) => { const zoom = Math.round(self.width * 50 / 36 * 100) / 100, l = new Layer(self, name || "Camera 1", "camera");
+        l.root = new Prop(CAMERA(c || [self.width / 2, self.height / 2], zoom), null, l); l._3d = true; l.autoOrient = 4214; return l._ins(); },
       addShape: () => new Layer(self, "Shape Layer " + (self._layers.filter((x) => x.kind === "shape").length + 1), "shape")._ins(),
       addNull: (dur) => { const l = new Layer(self, "Null " + (self._layers.length + 1), "null"); l.nullLayer = true; l._src = { w: 100, h: 100 }; l._setAnchorDefault(); if (dur) l.outPoint = dur; return l._ins(); },
       addSolid: (c, n, w, h) => { const l = new Layer(self, n, "solid"); l._solid = { color: c.slice(0, 3), w: w || self.width, h: h || self.height }; l._src = { w: w || self.width, h: h || self.height }; l._setAnchorDefault(); return l._ins(); },
@@ -322,7 +339,7 @@ let LAYER_UID = 0;
 class Layer {
   constructor(comp, name, kind) {
     this.uid = ++LAYER_UID; this.containingComp = comp; this.name = name; this.kind = kind; this.enabled = true; this.audioEnabled = true; this.guideLayer = false; this.shy = false; this.locked = false;
-    this._st = 0; this.inPoint = 0; this.outPoint = comp.duration; this.stretch = 100; this.label = 0; this.motionBlur = false; this.threeDLayer = false;
+    this._st = 0; this.inPoint = 0; this.outPoint = comp.duration; this.stretch = 100; this.label = 0; this.motionBlur = false; this._3d = false;
     this.collapseTransformation = false; this.blendingMode = BLEND.NORMAL; this.trackMatteType = 5012; this._matte = null; this._parent = null; this.nullLayer = false; this.source = null;
     this.root = new Prop(layerSchema(kind), null, this);
     if (kind === "text" || kind === "shape") { this.property("ADBE Transform Group").property("ADBE Position")._value = [comp.width / 2, comp.height / 2, 0]; }
@@ -330,6 +347,15 @@ class Layer {
   }
   _setAnchorDefault() { this.property("ADBE Transform Group").property("ADBE Anchor Point")._value = [this._src.w / 2, this._src.h / 2, 0]; this.property("ADBE Transform Group").property("ADBE Position")._value = [this.containingComp.width / 2, this.containingComp.height / 2, 0]; }
   _ins() { this.containingComp._layers.unshift(this); return this; }
+  get threeDLayer() { return this._3d; }
+  set threeDLayer(v) {   // AE adds Orientation / X / Y Rotation to the transform and renames Rotation to Z Rotation
+    v = !!v; if (v === this._3d) return;
+    if (this.kind === "camera" || this.kind === "audio") throw new Error("After Effects: threeDLayer can't be set on a " + this.kind + " layer");
+    const tg = this.root.children.find((c) => c.matchName === "ADBE Transform Group"), rz = tg.children.find((c) => c.matchName === "ADBE Rotate Z"), i = tg.children.indexOf(rz);
+    if (v) { tg.children.splice(i, 0, ...XYZ_ROT().map((sp) => new Prop(sp, tg, this))); rz._name = "Z Rotation"; }
+    else { tg.children = tg.children.filter((c) => !["ADBE Orientation", "ADBE Rotate X", "ADBE Rotate Y"].includes(c.matchName)); rz._name = "Rotation"; }
+    this._3d = v;
+  }
   get startTime() { return this._st; }
   set startTime(v) { const d = v - this._st; this._st = v; this.inPoint += d; this.outPoint += d; }   // AE moves the in/out points with the layer
   get index() { return this.containingComp._layers.indexOf(this) + 1; }

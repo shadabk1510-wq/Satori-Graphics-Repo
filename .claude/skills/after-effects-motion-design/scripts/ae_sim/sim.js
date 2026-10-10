@@ -436,7 +436,7 @@
     for (let k = C.layers.length - 1; k >= 0; k--) {
       const L = C.layers[k];
       if (!L.enabled && !(OPT.guides && L.guide)) continue;
-      if (L.kind === "null" || L.kind === "audio" || !inTime(L, t)) continue;
+      if (L.kind === "null" || L.kind === "audio" || L.kind === "camera" || !inTime(L, t)) continue;
       if (L.guide && !OPT.guides) continue;
       const op = val(tr(L, "ADBE Opacity"), t) / 100;
       if (op <= 0.001) continue;
