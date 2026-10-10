@@ -388,7 +388,7 @@ class Layer {
   duplicate() { throw new Error("model: duplicate() not modelled"); }
   remove() { const a = this.containingComp._layers; a.splice(a.indexOf(this), 1); }
   dump() {
-    return { uid: this.uid, name: this.name, kind: this.kind, enabled: this.enabled, guide: this.guideLayer, start: this.startTime, in: this.inPoint, out: this.outPoint,
+    return { uid: this.uid, name: this.name, kind: this.kind, threeD: this._3d, enabled: this.enabled, guide: this.guideLayer, start: this.startTime, in: this.inPoint, out: this.outPoint,
       collapse: this.collapseTransformation, blend: this.blendingMode, parent: this._parent ? this._parent.uid : null, matte: this._matte ? { uid: this._matte.uid, type: this.trackMatteType } : null,
       source: this.source ? (this.source instanceof CompItem ? { comp: this.source.name } : { footage: this.source.id }) : null, solid: this._solid || null, src: this._src || null,
       timeRemap: this._timeRemap, props: this.root.dump().kids };

@@ -117,7 +117,7 @@ LOOK.orbs = function (comp, list) {   // list: [{color, d, x, y, z, opacity, dri
         N3.xf(l, "ADBE Opacity").setValue(o.opacity);
         LOOK.boxBlur(l, o.blur || 140, "Orb softness");
         AEL.expr(N3.pos(l), "var p = " + (o.period || 14) + ", a = " + N3.num(o.drift || [60, 30]) + ";\n" +
-            "value + [a[0] * Math.sin(2 * Math.PI * time / p), a[1] * Math.cos(2 * Math.PI * time / p), 0]");
+            "add(value, [a[0] * Math.sin(2 * Math.PI * time / p), a[1] * Math.cos(2 * Math.PI * time / p), 0])");
         l.moveToEnd();
     }
 };
@@ -130,7 +130,7 @@ LOOK.camera = function (comp, o) {
     LOOK.key(X.property("ADBE Anchor Point"), o.t0, o.t1, o.from.poi, o.to.poi, LOOK.CALM);
     cam = comp.layer("CAMERA"); X = cam.property("ADBE Transform Group");
     AEL.expr(X.property("ADBE Position"), "// Camera move % on STYLE CONTROLS scales the dolly (0 = locked at the first key)\n" +
-        "var c = " + LOOK.ref("Camera move %") + " / 100, a = key(1).value;\na + (value - a) * c");
+        "var c = " + LOOK.ref("Camera move %") + " / 100, a = key(1).value;\nadd(a, mul(sub(value, a), c))");
     C = cam.property("ADBE Camera Options Group");
     C.property("ADBE Camera Depth of Field").setValue(1);
     C.property("ADBE Camera Blur Level").setValue(100);

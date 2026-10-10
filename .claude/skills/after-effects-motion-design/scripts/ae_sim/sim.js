@@ -107,7 +107,7 @@
         const f = (pn) => { const p = typeof pn === "number" ? fx.kids[pn - 1] : fx.kids.find((k) => k.name === pn || k.mn === pn); if (!p) throw new Error(`effect param ${pn}`); return val(p, t); };
         return f;
       },
-      get transform() { return { get position() { return val(tr(L, "ADBE Position"), t); }, get scale() { return val(tr(L, "ADBE Scale"), t); }, get opacity() { return val(tr(L, "ADBE Opacity"), t); },
+      get transform() { return { get position() { return val(tr(L, "ADBE Position"), t); }, get pointOfInterest() { return val(tr(L, "ADBE Anchor Point"), t); }, get anchorPoint() { return val(tr(L, "ADBE Anchor Point"), t); }, get scale() { return val(tr(L, "ADBE Scale"), t); }, get opacity() { return val(tr(L, "ADBE Opacity"), t); },
         get anchorPoint() { return val(tr(L, "ADBE Anchor Point"), t); }, get rotation() { return val(tr(L, "ADBE Rotate Z"), t); } }; },
       get marker() { const m = L._g("ADBE Marker"), K = (m && m.keys) || []; return { numKeys: K.length, key: (i) => { const k = K[i - 1]; if (!k) throw new Error("marker key " + i); return { time: k.t, comment: k.comment }; } }; },
       sourceRectAtTime: (tt) => sourceRect(L, tt === undefined ? t : tt),
@@ -157,6 +157,38 @@
   function localM(L, t) {
     const a = val(tr(L, "ADBE Anchor Point"), t), p = val(tr(L, "ADBE Position"), t), s = val(tr(L, "ADBE Scale"), t), r = val(tr(L, "ADBE Rotate Z"), t);
     return new DOMMatrix().translate(p[0], p[1]).rotate(r).scale(s[0] / 100, s[1] / 100).translate(-a[0], -a[1]);
+  }
+  // ---- 3D: two-node camera (or AE's default 50 mm camera), perspective by a local affine fit at the layer's anchor
+  function localM3(L, t) {
+    const a = val(tr(L, "ADBE Anchor Point"), t), p = val(tr(L, "ADBE Position"), t), s = val(tr(L, "ADBE Scale"), t), o = tr(L, "ADBE Orientation") ? val(tr(L, "ADBE Orientation"), t) : [0, 0, 0];
+    const rx = (tr(L, "ADBE Rotate X") ? val(tr(L, "ADBE Rotate X"), t) : 0) + o[0], ry = (tr(L, "ADBE Rotate Y") ? val(tr(L, "ADBE Rotate Y"), t) : 0) + o[1], rz = val(tr(L, "ADBE Rotate Z"), t) + o[2];
+    return new DOMMatrix().translate(p[0], p[1], p[2] || 0).rotate(0, 0, rz).rotate(0, ry, 0).rotate(rx, 0, 0).scale(s[0] / 100, s[1] / 100, (s[2] === undefined ? 100 : s[2]) / 100).translate(-a[0], -a[1], -(a[2] || 0));
+  }
+  function worldM3(L, t) { let m = localM3(L, t), q = L.parent ? LAYERS[L.parent] : null; while (q) { m = localM3(q, t).multiply(m); q = q.parent ? LAYERS[q.parent] : null; } return m; }
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const norm = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+  function cameraOf(C, t) {
+    const cam = C.layers.find((L) => L.kind === "camera" && L.enabled && inTime(L, t)), Z0 = C.w * 50 / 36;
+    let P = [C.w / 2, C.h / 2, -Z0], A = [C.w / 2, C.h / 2, 0], zoom = Z0, dof = 0, focus = Z0, ap = 0, bl = 100;
+    if (cam) {
+      P = val(tr(cam, "ADBE Position"), t); A = val(tr(cam, "ADBE Anchor Point"), t);
+      const O = cam._g("ADBE Camera Options Group"), g = (mn) => val(kid(O, mn), t);
+      zoom = g("ADBE Camera Zoom"); dof = g("ADBE Camera Depth of Field"); focus = g("ADBE Camera Focus Distance"); ap = g("ADBE Camera Aperture"); bl = g("ADBE Camera Blur Level");
+    }
+    const f = norm([A[0] - P[0], A[1] - P[1], (A[2] || 0) - P[2]]), r = norm(cross([0, 1, 0], f)), u = cross(f, r);
+    return { P, f, r, u, zoom, dof, focus, ap, bl, W: C.w, H: C.h };
+  }
+  function project(cam, X) {
+    const d = [X[0] - cam.P[0], X[1] - cam.P[1], (X[2] || 0) - cam.P[2]], z = Math.max(1, dot(d, cam.f));
+    return [cam.W / 2 + cam.zoom * dot(d, cam.r) / z, cam.H / 2 + cam.zoom * dot(d, cam.u) / z, z];
+  }
+  function affine3(L, t, cam) {   // 2D matrix that matches the projection at the anchor (exact there, close nearby)
+    const M = worldM3(L, t), a = val(tr(L, "ADBE Anchor Point"), t), S = 60;
+    const w = (x, y) => { const q = M.transformPoint(new DOMPoint(x, y, 0)); return project(cam, [q.x, q.y, q.z]); };
+    const o = w(a[0], a[1]), ex = w(a[0] + S, a[1]), ey = w(a[0], a[1] + S);
+    const A = (ex[0] - o[0]) / S, B = (ex[1] - o[1]) / S, Cc = (ey[0] - o[0]) / S, D = (ey[1] - o[1]) / S;
+    return { m: new DOMMatrix([A, B, Cc, D, o[0] - A * a[0] - Cc * a[1], o[1] - B * a[0] - D * a[1]]), z: o[2] };
   }
   function worldM(L, t) { let m = localM(L, t), q = L.parent ? LAYERS[L.parent] : null; while (q) { m = localM(q, t).multiply(m); q = q.parent ? LAYERS[q.parent] : null; } return m; }
   const mScale = (m) => Math.sqrt(Math.abs(m.a * m.d - m.b * m.c));
@@ -407,21 +439,51 @@
     x.setTransform(1, 0, 0, 1, 0, 0); x.globalCompositeOperation = "destination-in"; x.drawImage(tmp, 0, 0); x.globalCompositeOperation = "source-over";
     relCv(tmp);
   }
-  function renderLayer(L, t, M0, depth) {   // -> canvas with the layer's look (masks, matte, effects) but not opacity/blend
-    const M = M0.multiply(worldM(L, t)), buf = getCv(), x = buf.getContext("2d");
+  function fillOver(buf, paint) { const g = buf.getContext("2d"); g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = "source-atop"; paint(g); g.restore(); }
+  function colorFx(L, t, buf, M) {   // generators that recolour the layer inside its own alpha
+    for (const f of fxList(L)) {
+      if (f.enabled === false) continue;
+      if (f.mn === "ADBE 4ColorGradient") {
+        const P = [1, 3, 5, 7].map((i) => val(kid(f, "ADBE 4ColorGradient-000" + i), t)), Cc = [2, 4, 6, 8].map((i) => val(kid(f, "ADBE 4ColorGradient-000" + i), t));
+        const tp = (q) => { const r = M.transformPoint(new DOMPoint(q[0], q[1])); return [r.x, r.y]; }, p = P.map(tp);
+        const top = getCv(), bot = getCv(), a = top.getContext("2d"), b = bot.getContext("2d");
+        let g = a.createLinearGradient(p[0][0], p[0][1], p[1][0], p[1][1]); g.addColorStop(0, rgba(Cc[0])); g.addColorStop(1, rgba(Cc[1])); a.fillStyle = g; a.fillRect(0, 0, W, H);
+        g = b.createLinearGradient(p[2][0], p[2][1], p[3][0], p[3][1]); g.addColorStop(0, rgba(Cc[2])); g.addColorStop(1, rgba(Cc[3])); b.fillStyle = g; b.fillRect(0, 0, W, H);
+        const mid = [(p[0][0] + p[1][0]) / 2, (p[0][1] + p[1][1]) / 2], low = [(p[2][0] + p[3][0]) / 2, (p[2][1] + p[3][1]) / 2];
+        g = b.createLinearGradient(mid[0], mid[1], low[0], low[1]); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,1)");
+        b.globalCompositeOperation = "destination-in"; b.fillStyle = g; b.fillRect(0, 0, W, H);
+        a.drawImage(bot, 0, 0); fillOver(buf, (x) => x.drawImage(top, 0, 0)); relCv(top); relCv(bot);
+      } else if (f.mn === "ADBE Ramp" && L.kind !== "solid") {
+        const tp = (q) => { const r = M.transformPoint(new DOMPoint(q[0], q[1])); return [r.x, r.y]; }, p0 = tp(val(kid(f, "ADBE Ramp-0001"), t)), p1 = tp(val(kid(f, "ADBE Ramp-0003"), t));
+        fillOver(buf, (x) => { const g = x.createLinearGradient(p0[0], p0[1], p1[0], p1[1]); g.addColorStop(0, rgba(val(kid(f, "ADBE Ramp-0002"), t))); g.addColorStop(1, rgba(val(kid(f, "ADBE Ramp-0004"), t))); x.fillStyle = g; x.fillRect(0, 0, W, H); });
+      }
+    }
+  }
+  function renderLayer(L, t, M0, depth, M3) {   // -> canvas with the layer's look (masks, matte, effects) but not opacity/blend
+    const M = M3 ? M0.multiply(M3) : M0.multiply(worldM(L, t)), buf = getCv(), x = buf.getContext("2d");
     drawContent(L, t, x, M, depth);
     maskPath(L, t, x, M);
+    colorFx(L, t, buf, M);
     let out = buf;
     const fx = fxList(L), ms = mScale(M);
-    const blur = fx.find((f) => f.mn === "ADBE Gaussian Blur 2" && f.kids && val(kid(f, "ADBE Gaussian Blur 2-0001"), t) > 0.05);
-    const sh = fx.find((f) => f.mn === "ADBE Drop Shadow");
-    if (blur || sh) {
+    let sigma = 0;
+    for (const f of fx) {
+      if (f.mn === "ADBE Gaussian Blur 2" && f.kids) sigma = Math.max(sigma, (val(kid(f, "ADBE Gaussian Blur 2-0001"), t) * ms) / 2.5);
+      if (f.mn === "ADBE Box Blur2" && f.kids) sigma = Math.max(sigma, val(kid(f, "ADBE Box Blur2-0001"), t) * ms * 0.58);
+    }
+    if (L._dof) sigma = Math.hypot(sigma, L._dof);
+    const shs = fx.filter((f) => f.mn === "ADBE Drop Shadow" && val(kid(f, "ADBE Drop Shadow-0002"), t) > 0.5);
+    if (sigma > 0.05 || shs.length) {
       const o2 = getCv(), y = o2.getContext("2d");
-      if (sh) { const c = val(kid(sh, "ADBE Drop Shadow-0001"), t), op = val(kid(sh, "ADBE Drop Shadow-0002"), t) / 255, dir = (val(kid(sh, "ADBE Drop Shadow-0003"), t) * Math.PI) / 180, dist = val(kid(sh, "ADBE Drop Shadow-0004"), t) * ms, soft = val(kid(sh, "ADBE Drop Shadow-0005"), t) * ms;
-        y.shadowColor = rgba(c, op); y.shadowBlur = soft; y.shadowOffsetX = Math.sin(dir) * dist; y.shadowOffsetY = -Math.cos(dir) * dist; }
-      if (blur) y.filter = `blur(${(val(kid(blur, "ADBE Gaussian Blur 2-0001"), t) * ms) / 2.5}px)`;
-      y.drawImage(buf, 0, 0); y.shadowColor = "transparent"; y.filter = "none";
-      relCv(buf); out = o2;
+      for (const sh of shs) {
+        const c = val(kid(sh, "ADBE Drop Shadow-0001"), t), op = val(kid(sh, "ADBE Drop Shadow-0002"), t) / 255, dir = (val(kid(sh, "ADBE Drop Shadow-0003"), t) * Math.PI) / 180, dist = val(kid(sh, "ADBE Drop Shadow-0004"), t) * ms, soft = val(kid(sh, "ADBE Drop Shadow-0005"), t) * ms;
+        const s1 = getCv(), z = s1.getContext("2d"); z.filter = `blur(${soft / 2}px)`; z.drawImage(buf, Math.sin(dir) * dist, -Math.cos(dir) * dist);
+        z.filter = "none"; z.globalCompositeOperation = "source-in"; z.fillStyle = rgba(c, Math.min(1, op)); z.fillRect(0, 0, W, H);
+        y.drawImage(s1, 0, 0); relCv(s1);
+      }
+      y.drawImage(buf, 0, 0);
+      if (sigma > 0.05) { const o3 = getCv(), q = o3.getContext("2d"); q.filter = `blur(${sigma}px)`; q.drawImage(o2, 0, 0); relCv(o2); relCv(buf); out = o3; }
+      else { relCv(buf); out = o2; }
     }
     if (L.matte) {
       const ML = LAYERS[L.matte.uid];
@@ -433,14 +495,30 @@
   }
   function renderComp(C, t, x, M0, depth) {
     if (depth > 12) throw new Error("comp nesting too deep");
+    const vis = [];
     for (let k = C.layers.length - 1; k >= 0; k--) {
       const L = C.layers[k];
       if (!L.enabled && !(OPT.guides && L.guide)) continue;
       if (L.kind === "null" || L.kind === "audio" || L.kind === "camera" || !inTime(L, t)) continue;
       if (L.guide && !OPT.guides) continue;
+      vis.push(L);
+    }
+    const cam = vis.some((L) => L.threeD) ? cameraOf(C, t) : null;
+    // runs of adjacent 3D layers are drawn far-to-near (2D layers split the runs, as in AE)
+    const order = []; let run = [];
+    const flush = () => { run.sort((a, b) => b._z - a._z); order.push(...run); run = []; };
+    for (const L of vis) {
+      if (cam && L.threeD) {
+        const A = affine3(L, t, cam); L._m3 = A.m; L._z = A.z;
+        L._dof = cam.dof ? Math.min(60, cam.ap * (cam.bl / 100) * Math.abs(A.z - cam.focus) / A.z / 3) : 0;
+        run.push(L);
+      } else { flush(); L._m3 = null; L._dof = 0; order.push(L); }
+    }
+    flush();
+    for (const L of order) {
       const op = val(tr(L, "ADBE Opacity"), t) / 100;
       if (op <= 0.001) continue;
-      const cv = renderLayer(L, t, M0, depth);
+      const cv = renderLayer(L, t, M0, depth, L._m3);
       x.save(); x.setTransform(1, 0, 0, 1, 0, 0); x.globalAlpha = op; x.globalCompositeOperation = BLEND[L.blend] || "source-over"; x.drawImage(cv, 0, 0); x.restore();
       relCv(cv);
     }
