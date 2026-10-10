@@ -55,3 +55,14 @@ and once with the real files. Then `scripts/sfx/mix.py` mixes the VO + every SFX
 Audio Levels keys). It prints the SFX-vs-VO level per type and writes a preview the user can listen to before
 touching AE. Targets that sounded right: whoosh/pop ~9 dB under the VO, ticks ~12 under, dings ~6 under, mix peak
 below -1 dBFS.
+
+## 7. ElevenLabs (the user's account; mind their credits)
+- Use the user's own SFX library first. ElevenLabs is for sounds the library can't cover: an exact length, a branded UI chime, a riser that has to end on a cut.
+- Restricted connector: sound effects (`sfx`, eleven_text_to_sound_v2, 0.5-30 s, `loop` option, prompt_influence), TTS, Scribe speech-to-text. It has **no music**. Background music needs the full connector (custom connector `https://api.elevenlabs.io/v1/mcp`).
+- Credits:
+  - run with `estimate_only` before every run, and ask before a long run or a batch;
+  - set `generations_count` to 1-2 (the user asked to save credits);
+  - never call a generation again to retry;
+  - generate each sound once and reuse it.
+- This cloud container's proxy denies api.elevenlabs.io. If a result can't be downloaded here, the user downloads it from the flow link into the SFX folder, and add_sfx.jsx picks it up by file name.
+- Scribe word timestamps can replace the local ASR for VO timing (more accurate). It costs credits, so ask first on long recordings.
