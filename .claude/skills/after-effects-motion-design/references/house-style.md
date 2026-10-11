@@ -2,9 +2,12 @@
 
 Built from the user's own scene breakdown ("Main SaaS", Scene 1: a 2.4 s vertical clip, the timeline and graph-editor screenshots, and the render). Extend this file as more of their projects come in, ideally as `export_template.jsx` JSON.
 
-## Format and pacing
-- Vertical **1080×1920, 30 fps** (reels). Use **fast social pacing**: a beat lasts **0.6–1.8 s**, not the 10–15 s calm explainer scenes.
-- Something always moves: the background gradient drifts, the group pushes in slowly, and the next beat arrives before the current one settles.
+## Format and pacing (the user's direction, 2026-10-11)
+- Satori videos are **16:9** (1920×1080). The Scene 1 breakdown was vertical, but use it only as a **technique reference**: keyframes, colours, the graph editor and speed ramping, gradients, and how nulls move from one frame to the next with cuts in between. It doesn't set the format.
+- **Only the hook is fast**: 0.6–1.8 s beats, snappy cuts and whips, as in Scene 1.
+- **After the hook the video explains**, following the script: calm pacing that follows the voice-over, with **clean, smooth motion**, no rushing and no busy cuts. Keep the same easing character (clean high-influence speed ramps), applied to longer, calmer moves.
+- Make the flow creative, but follow the structure of old Satori videos; the user will share some for breakdowns.
+- Something should always move gently (drifting gradient light, a slow null push) so a hold never looks frozen.
 
 ## Easing (speed graph)
 - Speed curves are **tall, narrow spikes** (peaks of 2,000–7,000 px/s) on long flat ends. A move hangs back, snaps through in a few frames, then settles. Use **high influence (85–100%)** and stagger properties **0.1–0.3 s** apart.
