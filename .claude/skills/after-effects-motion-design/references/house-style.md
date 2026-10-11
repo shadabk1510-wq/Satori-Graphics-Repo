@@ -31,3 +31,20 @@ Built from the user's own scene breakdown ("Main SaaS", Scene 1: a 2.4 s vertica
 - **In:** a lens bubble (CC Lens / Optics Compensation) expands from the centre with radial blur, from frame 0 to 3.
 - **Out:** a whip (fast position/scale with **motion blur**) up or to the side, over the last 2–4 frames, then a hard cut.
 - **End of beat:** a fast zoom-in with a shift and motion blur (the text grows and slides left).
+
+## SaaS Style 1: Scenes 2 and 3 (Drive: `Satori Projects/Scene breakdown/Saas Style 1`)
+- **Zoom-through transition** (Scene 1 → 2):
+  - The master **Null 15** scales from 100% to **352%** in about 8 frames. Its speed spike is the tallest in the comp (~12,500 %/s): a near-symmetric, very high-influence ease with motion blur.
+  - The text flies through the lens, then there's a **hard cut**. The next beat starts *already moving* (tiles mid-flip), so the cut hides inside the motion.
+- **Chained nulls:** Null 19 → Null 18 → cards; Null 17 → Null 16 (Position + Scale 145.6%) → lines, text, square and icon. Each beat has its own small rig, and the parent rig moves the whole layout between beats.
+- **Design-canvas guide lines:** thin white lines (`lines`, `lines 2–4`) slide into place to frame the headline, like Figma guides.
+- **Headline reveal** ("Type or Speak"): a text animator named **IN** whose Range Selector **Offset** is keyed (word-by-word slide and fade). A gradient highlight bar (`square`, a 4-Color Gradient solid) sits behind the text.
+- **3D tiles** (card precomps with an icon) **flip in from edge-on** (Y rotation ~90° → face-on), then drift slowly. One sits top-left and one bottom-right, framing the text diagonally.
+- **The background gradient stays continuous across cuts:** every 4-Color Gradient solid has the same Point 1–4 keys (for example P1 48,−254; P2 1191,−243; P3 −108,2098; P4 861,1667), so the light keeps drifting through the cut.
+- **Phone shots** (Scene 3) use a bought **Videohive "Phone 17 Loop Mockup"**:
+  - a pre-rendered phone loop (`07 Mockup Loop (Alpha)`), time-remapped;
+  - app UI goes into its `Placeholder_01/02` comps, and `CC Cylinder` (Rotation Y) bends the screen;
+  - there's a `Control` layer.
+
+  Our scripts should *fill the user's own mockup templates* (find the Placeholder comps and drop the UI in) rather than rebuild the phones. Never ship the template's own files.
+- **Drive transfer:** the connector moves files up to ~3 MB each. Ask for big JSON exports **zipped** (they shrink ~10×), and for big videos either compressed or attached in chat.
