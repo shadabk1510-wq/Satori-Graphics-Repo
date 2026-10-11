@@ -12,6 +12,7 @@ SAT.SNAP = [92, 92];   // symmetric spike: hangs, snaps through the middle, sett
 SAT.OUT = [12, 96];    // leaves fast, long settle (entrances)
 SAT.IN = [96, 12];     // builds slowly, stops sharp (exits, whips)
 SAT.CALM = [70, 70];   // explanation drifts and pushes
+SAT.DRIFT = [1, 1];    // near-linear: hold drifts never ease to a stop
 SAT.k = function (prop, t0, t1, v0, v1, inf) { LOOK.key(prop, t0, t1, v0, v1, inf || SAT.CALM); return prop; };
 
 SAT.scene = function (id, title, T) {
@@ -19,6 +20,19 @@ SAT.scene = function (id, title, T) {
     c.parentFolder = SAT.folders.scenes; c.motionBlur = true;
     AEL.created("comp", c.name);
     return { id: id, comp: c, T: T, ctx: { comp: c, ox: 960, oy: 540, parent: null, slot: "pre", S: null } };
+};
+// Hold drift (the user's pacing rule): every frame on screen hangs from its own null that keeps a small, steady move in
+// the direction of its entrance (slid in left to right: keeps sliding right; scaled down: keeps scaling down) for as
+// long as the frame is held, so nothing ever freezes. Entrance and exit keys stay on the child or the MASTER, so the
+// drift runs underneath them. m: {pos: [dx, dy, dz], scale: end %, rx, ry, rz: degrees}, near-linear from t0 to t1.
+SAT.drift = function (S, name, parent, m, t0, t1) {
+    var n = SAT.nul(S, name + " drift", [0, 0, 0], parent), a = t0 || 0, b = t1 === undefined ? S.T : t1,
+        R = [["rx", "ADBE Rotate X"], ["ry", "ADBE Rotate Y"], ["rz", "ADBE Rotate Z"]], i;
+    n.label = 11;
+    if (m.pos) { SAT.k(N3.pos(n), a, b, [0, 0, 0], m.pos, SAT.DRIFT); }
+    if (m.scale) { SAT.k(N3.xf(n, "ADBE Scale"), a, b, [100, 100, 100], [m.scale, m.scale, m.scale], SAT.DRIFT); }
+    for (i = 0; i < R.length; i++) { if (m[R[i][0]]) { SAT.k(N3.xf(n, R[i][1]), a, b, 0, m[R[i][0]], SAT.DRIFT); } }
+    return n;
 };
 // 3D null with its anchor at 0 (children use plain offsets). pos is absolute, or local when parent is given.
 SAT.nul = function (S, name, pos, parent) {

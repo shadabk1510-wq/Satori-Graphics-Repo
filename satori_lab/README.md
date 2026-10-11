@@ -23,7 +23,17 @@ In a **new, empty project**, run `File › Scripts › Run Script File… › sa
   - **OUT** (12/96): fast start, long settle.
   - **IN** (96/12): slow build, sharp stop.
   - **CALM** (70/70): explanation drifts.
-- **Rigs:** every scene hangs from a `MASTER` null; cards, rings and the panel have their own child nulls.
+- **Rigs:** every scene hangs from a `MASTER` null; cards, rings and the panel have their own child nulls, and every held frame sits under a drift null.
 - **Pacing:** the hook is fast (0–6.3 s, beats of 1.7–2.4 s); the explanation is calm (6–7.5 s per scene).
+- **Hold drift (v2):** no frame ever freezes. Every frame hangs from its own `... drift` null that keeps moving the way the frame came in:
+  - **H1:** "AI" keeps scaling down; the tiles keep travelling diagonally.
+  - **H2:** the line keeps rising; the push runs straight into the zoom.
+  - **H3:** keeps scaling down; the tiles keep turning.
+  - **E1:** the words keep sliding apart; the card keeps growing, and keeps turning after the flip.
+  - **E2:** keeps zooming out between the steps.
+  - **E3:** the panel keeps rising, coming closer and un-tilting; the text keeps rising.
+  - **E4:** keeps settling down to the last frame.
+
+  The drifts are near-linear, so they never ease to a stop.
 
 No voice-over: add music on `SATORI_MAIN` (there's a marker where the hook ends).

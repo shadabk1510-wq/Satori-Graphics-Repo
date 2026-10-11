@@ -9,6 +9,22 @@ Built from the user's own scene breakdown ("Main SaaS", Scene 1: a 2.4 s vertica
 - Make the flow creative, but follow the structure of old Satori videos; the user will share some for breakdowns.
 - Something should always move gently (drifting gradient light, a slow null push) so a hold never looks frozen.
 
+## Hold drift: no frame ever freezes (the user's rule, 2026-10-11)
+- **Whenever a frame is on screen, it moves.** Parent every layer of a frame (or element group) to its own null, and give that null a small, steady move for the whole time the frame is held.
+- **The drift continues the entrance**:
+  - slid in left → right: keep sliding right a little;
+  - scaled down into place: keep scaling down a little;
+  - scaled or grew up: keep growing;
+  - rose in: keep rising;
+  - flipped or turned: keep turning a few degrees.
+- **Size:** subtle but visible.
+  - Position: 25–50 px over the hold (more in z, e.g. 80 px toward camera).
+  - Scale: 3–8%.
+  - Rotation: 4–10°.
+- **Ease:** near-linear (influence 1/1), so the drift never eases to a stop. Make a master push linear right up to the exit (the zoom-through or whip).
+- **Keys:** keep the entrance and exit keys on the child or the MASTER. The drift null sits between them (MASTER → `... drift` → content), runs from the entrance to the end of the beat, and carries on underneath the exit, so the motion is continuous across the landing and the cut.
+- **Code:** in the Satori kit this is `SAT.drift(S, name, parent, {pos | scale | rx | ry | rz}, t0, t1)`.
+
 ## Easing (speed graph)
 - Speed curves are **tall, narrow spikes** (peaks of 2,000–7,000 px/s) on long flat ends. A move hangs back, snaps through in a few frames, then settles. Use **high influence (85–100%)** and stagger properties **0.1–0.3 s** apart.
 - There are two flavours: a fast start with a long settle (out low, in ~100), and a slow build with a sharp stop (out ~100, in low). There's no overshoot or bounce.

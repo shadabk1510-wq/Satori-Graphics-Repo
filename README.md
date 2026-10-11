@@ -11,6 +11,7 @@ After Effects projects built as native, editable layers from ExtendScript (`.jsx
 | `noon_ae/ae/scripts/add_sfx.jsx` + `sfx/` | NOON sound effects: 190 cues from the build timings, run on the finished project |
 | `noon_ae/ae/scripts/style/` | NOON style test: the glass look and 3D camera on one moment (8:22) |
 | `style_lab/` | **Aurelo** style lab: a separate 2-minute test film (fictional app) for the new look. See `style_lab/README.md` |
+| `satori_lab/` | **Satori lab**: a 30 s sample in the user's own style (Tallyo, fictional), built from their scene breakdowns. See `satori_lab/README.md` |
 
 Client assets, voice-overs, renders and package zips are kept out of git (see `.gitignore`).
 
@@ -25,6 +26,10 @@ Client assets, voice-overs, renders and package zips are kept out of git (see `.
   - a cheat sheet of their rules.
 
   Turn these into a house-style section in the skill.
+- **Satori lab:**
+  - The 30 s sample is approved overall.
+  - v2 adds the hold-drift rule: every held frame keeps moving the way it came in (see `references/house-style.md`).
+  - **Next:** the Satori reference videos (style and colour) and per-video folders (VO, ideas, PNG assets) on Drive, once the user says the uploads are done.
 - **ElevenLabs:** the restricted connector is connected (SFX, TTS, transcription; no music). Credit rules are in the skill's `references/sfx-workflow.md` § 7.
 
 ## Working rules
