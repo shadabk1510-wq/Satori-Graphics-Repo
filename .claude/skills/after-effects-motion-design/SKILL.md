@@ -183,4 +183,5 @@ Inside AE the starter creates: `01_Main`, `02_Sections`, `03_Precomps`, `04_Foot
 | Kinetic type, shape/mask/matte reveals, transitions, precomps, brand control rigs | `references/motion-recipes.md` |
 | Asset intake, reference-video style analysis, VO/script sync, organisation, portability | `references/production-workflow.md` |
 | Running scripts per OS, aerender/render queue, validation, error table, live MCP bridges | `references/render-and-troubleshoot.md` |
+| **The user's own style (read first for this user):** pacing, easing, rig, signature elements, transitions | `references/house-style.md` |
 | SFX: reading a reference's sound style, cues from build timings, picking and measuring files, levels, mix preview | `references/sfx-workflow.md` |
