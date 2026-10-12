@@ -29,7 +29,8 @@ Client assets, voice-overs, renders and package zips are kept out of git (see `.
 - **Satori lab:**
   - The 30 s sample is approved overall.
   - v2 adds the hold-drift rule: every held frame keeps moving the way it came in (see `references/house-style.md`).
-  - **Next:** the Satori reference videos (style and colour) and per-video folders (VO, ideas, PNG assets) on Drive, once the user says the uploads are done.
+  - The Satori reference videos (Drive: `Satori Video Refrence`) are broken down in `references/house-style.md`: palettes, VO-synced visuals, glass cards, 3D screen recordings.
+  - **Next:** the per-video folders (VO, ideas, PNG assets) on Drive, once the user says they're ready.
 - **ElevenLabs:** the restricted connector is connected (SFX, TTS, transcription; no music). Credit rules are in the skill's `references/sfx-workflow.md` § 7.
 
 ## Working rules

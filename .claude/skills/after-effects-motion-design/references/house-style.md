@@ -64,3 +64,70 @@ Built from the user's own scene breakdown ("Main SaaS", Scene 1: a 2.4 s vertica
 
   Our scripts should *fill the user's own mockup templates* (find the Placeholder comps and drop the UI in) rather than rebuild the phones. Never ship the template's own files.
 - **Drive transfer:** the connector moves files up to ~3 MB each. Ask for big JSON exports **zipped** (they shrink ~10×), and for big videos either compressed or attached in chat.
+
+## Satori reference videos (Drive: `Satori Video Refrence`, broken down 2026-10-12)
+These are two finished Satori Graphics videos. They are the target for **look, colour and how visuals follow the voice-over**. The palette comes from **each video's topic or sponsor**; the technique stays the same.
+
+### Ref 1: "Luma Skills" (30 s, coral and pink, kinetic type)
+- **Palette**, measured from the frames:
+  - coral `#DE4E5F` / `#E16170`;
+  - mid pink `#EB99A4` / `#ECA3AB`;
+  - blush `#F4CCD1` / `#FAD0D5`;
+  - near-white `#FDF5F6`;
+  - white `#FFFFFF`.
+- **Backgrounds:**
+  - soft blush → coral vertical gradients with a radial coral blob;
+  - plain white for emphasis words;
+  - full coral radial gradient for big statements.
+  - Faint **design-canvas grid lines with corner dots** sit on top.
+- **Captions are the VO, phrase by phrase.** ~2.8 words/s, 3–6 words on screen at a time.
+  - Each word fades and de-blurs in on its own beat, slightly off its baseline, then settles.
+  - The phrase drifts upward slowly while it holds, then blurs off.
+  - Weights: light/semibold white over pink, **bold coral** over white for emphasis words ("Importantly", "It's not magic"), and **huge bold white** over coral ("Myself", with the vertical word roller above and below).
+- **Opening:** a photoreal studio desk (3D or photo) whose ultrawide monitor shows the captions on a coral gradient, with a slow camera push.
+  - Words split apart to make room for an **inline image chip** ("Finally Nailed [image] Direction").
+- **Icon cards:** four white rounded cards (icon + two-line label) pop in staggered in a row.
+  - They then re-arrange into a diamond, and coral connector lines draw on between them.
+- **UI mockup:** a dark app window (with a pink outer glow) swings in from a 3D tilt.
+  - A product image is dragged into the prompt bar.
+  - Prompt text types on.
+  - A results grid fills in staggered, with pink placeholder tiles before each image loads.
+- **Transitions:**
+  - motion-blurred whip and zoom of huge type ("Importantly" streaks in, then scales down);
+  - quick cross-dissolves between caption beats;
+  - 4-point **sparkle stars** pop beside "magic".
+
+### Ref 2: "Dropbox × ChatGPT" (3 min sponsor walkthrough, dark navy and electric blue)
+- **Palette:**
+  - navy `#06071C` / `#121731` / `#141E3E` (top-left);
+  - electric blue `#3572F8` / `#3D5FF8` (bottom glow);
+  - mid blues `#1C417B` / `#295AD1`;
+  - cyan `#3E93DD` / `#6CA8D6`.
+  - Logo scenes switch to flat grey `#C4C4C4`; screen recordings are dark UI `#171717`.
+- **Background:** one navy → electric-blue gradient with a big soft blue glow rising from the bottom edge. It stays under the whole video.
+- **Hook (0–28 s):**
+  - A dot grows into a white circle badge with **rotating circular text** ("Design Process — BRIEF → RESEARCH → CONCEPT → …"); the product image inside swaps on the beat.
+  - The headline sits beside it in two weights: thin "I've been thinking a lot about" over **bold italic underlined "Artificial Intelligence"**.
+  - A 3D chrome-blue head render with a UI widget ("ADD INFORMATION NO. 1 [INSERT]"): a cursor clicks, the counter increments, and white "Info." speech-bubble chips flip out of the head in 3D.
+- **Logo and glass-card sequence:**
+  - The logo shrinks on grey, an outline card draws around it, and a light sweep crosses it.
+  - Cut to blue: a **glass card** draws its outline from one corner (trim path), then fills with a blue-violet → cyan gradient.
+  - A vertical line splits it into two halves, the second logo rises in, small tracked caps labels appear below (DROPBOX / CHATGPT), and an "×" draws on.
+  - Meme characters peek in from the card edges ("like Rick and Morty"); the card stretches to a full-width banner and the show logo is revealed.
+- **Explanation (28 s – 2:50):** screen recordings on a 3D plane.
+  - A 3D laptop pushes in, then the screen fills the frame.
+  - Recordings tilt on Y/X to show their edge against the blue background.
+  - The camera pushes in on the part being talked about (a table, the prompt bubble).
+  - **Glass callout cards** slide in from the frame edge with bullet lists ("Material Used: • the original client brief • audience research • feedback…"), with a hand-drawn curved arrow.
+  - Floating 3D folder icons ("Audience Research", "Discovery Notes", "Brief") orbit a white app-logo disc.
+- **End:** logo on grey with a small line ("Use my link below").
+- **VO pacing:** ~165 words/min. Every noun the VO names gets a visual on that word: "Dropbox" → logo, "Rick and Morty" → characters, "the brief, the feedback, the audience research" → the bullet card.
+
+### What carries across both (apply to every Satori video)
+1. **The visuals follow the VO word by word.** Captions or kinetic type for statements; an object, logo, card or UI for every named thing, landing on the word.
+2. **One continuous gradient background per video**, coloured from the topic or sponsor brand. Use a light/pastel world (ref 1, the Tallyo lab) or a dark navy + brand-glow world (ref 2). Not both in one video.
+3. **Glass and white cards:** rounded, thin white stroke, gradient or white fill, soft shadow or outer glow. They draw on (outline trim) or pop in staggered; light sweeps cross logos.
+4. **Type:** Inter/SF-style sans. Two-weight headlines (thin lead-in + bold or bold-italic key phrase). Bold for emphasis words; small tracked caps for labels.
+5. **UI and screen recordings live in 3D:** tilted planes, a laptop push-in, and camera pushes to the detail. Callouts slide in from the edge.
+6. **Motion:** motion-blurred whips and zooms for emphasis; the circular-text badge, the word roller and the canvas grid with corner dots as signature pieces.
+7. **Holds:** the reference screen-recording section has 0.5–1.3 s fully still stretches (about 73 s of the 3 min). Under the hold-drift rule above, **never leave those still**: give every recording a slow push or tilt drift.
