@@ -86,7 +86,7 @@ MM.slam = function (S, parent, text, o) {
 // Black tag label (documentary lower-third style). o: {fs, bg, color, t, z}
 MM.tag = function (S, parent, str, x, y, o) {
     o = o || {};
-    var fs = o.fs || 30, w = String(str).length * fs * 0.66 + fs * 1.4, h = fs * 1.9, n = SAT.nul(S, "Tag " + str, [x, y, o.z || -30], parent || S.M), b, t;
+    var fs = o.fs || 30, w = String(str).length * fs * 0.76 + fs * 1.6, h = fs * 1.9, n = SAT.nul(S, "Tag " + str, [x, y, o.z || -30], parent || S.M), b, t;
     b = N3.box(S.ctx, { name: "Tag bg", cx: 0, cy: 0, w: w, h: h, r: 4, fill: o.bg || "#141014" });
     t = SAT.text(S, String(str).toUpperCase(), { name: "Tag text", x: 0, cy: 0, fs: fs, wt: 800, color: o.color || "#FFFFFF", align: "center", ls: 0.08 });
     SAT.hang(b, n, 0); SAT.hang(t, n, -1);
@@ -137,7 +137,7 @@ MM.face = function (S, parent, x, y, o) {
 MM.page = function (S, parent, rel, size, o) {
     // the page, its highlights and pen rings live in one flat precomp; only that precomp is tilted in 3D, so the marks
     // can never sort behind the page
-    var nm = o.name || "Page", R = MM.rig(S, nm, parent, [0, 0, 0], o.t || 0, o.from || "up", { off: o.off || 500, d: o.d || 0.9 }),
+    var nm = o.name || "Page", R = MM.rig(S, nm, parent, [0, 0, o.z === undefined ? 260 : o.z], o.t || 0, o.from || "up", { off: o.off || 500, d: o.d || 0.9 }),
         P = SAT.nul(S, nm + " camera", [0, 0, 0], R), s = o.w / size[0], W = Math.round(size[0] * s), H = Math.round(size[1] * s), pc, L, img;
     pc = app.project.items.addComp("SAT " + S.id + " \u00B7 " + nm, W, H, 1, S.T, SAT.FPS);
     pc.parentFolder = SAT.folders.pre; AEL.created("precomp", pc.name);
@@ -223,7 +223,8 @@ MM.PAGES = {
     wired: { img: "web/page_wired.jpg", size: [2560, 3240], head1: [140, 1560, 925, 82], head2: [140, 1672, 867, 82], hate: [395, 1672, 612, 82],
         dek: [468, 1874, 656, 44], para1: [318, 2950, 1060, 48], para2: [428, 3000, 840, 48], para3: [676, 3054, 568, 46] },
     inq: { img: "web/page_inq.jpg", size: [2560, 1400], head1: [300, 812, 1740, 84], head2: [300, 912, 1460, 88], dek: [300, 1042, 1730, 52] },
-    sfc: { img: "web/page_sfc.jpg", size: [1340, 5500], head: [70, 120, 1200, 200], disgusted: [192, 4016, 168, 46], ethics: [282, 4082, 102, 46] }
+    sfc: { img: "web/page_sfc.jpg", size: [2450, 6000], head2: [70, 300, 740, 70], backlash: [560, 300, 250, 70], photo: [64, 632, 1715, 1150],
+        disg1: [175, 4342, 1475, 40], disg2: [175, 4407, 215, 40], will1: [175, 5457, 1455, 40], massively: [1255, 5457, 375, 40] }
 };
 // White speech callout with a tail, text typed on. o: {w, fs, t, tail: "left" | "right" | "down"}
 MM.callbox = function (S, parent, text, x, y, o) {
@@ -237,5 +238,61 @@ MM.callbox = function (S, parent, text, x, y, o) {
     SAT.hang(t, n, -1);
     N3.typeOn(t, (o.t || 0) + 0.15, (o.t || 0) + 0.15 + (o.type || 1.0));
     MM.pop(n, o.t || 0, 0.4);
+    return n;
+};
+
+// Two-week calendar card: 14 day cells; MM.days(cal, from, to, color, t0, t1) fills days one by one.
+MM.calendar = function (S, parent, x, y, o) {
+    o = o || {};
+    var n = MM.rig(S, "Calendar", parent, [x, y, o.z || 0], o.t || 0, o.from || "up", o), b, i, c, cells = [], cw = 120, gap = 14, l;
+    b = N3.box(S.ctx, { name: "Calendar card", cx: 0, cy: 0, w: 7 * cw + 6 * gap + 80, h: 2 * cw + gap + 150, r: 26, fill: "#FFFFFF" });
+    LOOK.dropShadow(b, "Soft shadow", { color: "#4A1E28", opacity: 0.24, dist: 22, soft: 60 }); SAT.hang(b, n, 0);
+    l = SAT.text(S, "TWO WEEKS", { name: "Calendar title", x: -(7 * cw + 6 * gap) / 2, cy: -(2 * cw + gap) / 2 - 42, fs: 28, wt: 800, color: MM.C.soft, ls: 0.1 }); SAT.hang(l, n, -1);
+    for (i = 0; i < 14; i++) {
+        c = N3.box(S.ctx, { name: "Day " + (i + 1), cx: ((i % 7) - 3) * (cw + gap), cy: (Math.floor(i / 7) - 0.5) * (cw + gap) + 20, w: cw, h: cw, r: 16, fill: "#F4EEEE" });
+        SAT.hang(c, n, -1); cells.push(c);
+        l = SAT.text(S, String(i + 1), { name: "Day number " + (i + 1), x: ((i % 7) - 3) * (cw + gap) - cw / 2 + 16, cy: (Math.floor(i / 7) - 0.5) * (cw + gap) + 20 - cw / 2 + 22, fs: 22, wt: 700, color: MM.C.soft }); SAT.hang(l, n, -2);
+    }
+    return { n: n, cells: cells, S: S };
+};
+MM.days = function (cal, from, to, color, t0, t1) {
+    var i, k = to - from + 1, c, f;
+    for (i = from; i <= to; i++) {
+        c = cal.cells[i - 1];
+        f = N3.box(cal.S.ctx, { name: "Day fill " + i, cx: 0, cy: 0, w: 120, h: 120, r: 16, fill: color });
+        N3.parent(f, c); f.threeDLayer = true; N3.pos(f).setValue([0, 0, -0.5]);
+        MM.pop(f, t0 + (t1 - t0) * (i - from) / Math.max(1, k), 0.3);
+    }
+};
+// Social post card (her post): avatar = her face, name, image; the share/heart row is parented to the card.
+// o: {img (rel) | m (true: the Muse M), t, from, w}
+MM.post = function (S, parent, x, y, o) {
+    o = o || {};
+    var w = o.w || 640, h = w * 1.02, n = MM.rig(S, "Her post", parent, [x, y, o.z || 0], o.t || 0, o.from || "up", o), b, l, iw = w - 60, ih = iw * 0.62;
+    b = N3.box(S.ctx, { name: "Post card", cx: 0, cy: 0, w: w, h: h, r: 30, fill: "#FFFFFF" });
+    LOOK.dropShadow(b, "Soft shadow", { color: "#4A1E28", opacity: 0.26, dist: 24, soft: 60 }); SAT.hang(b, n, 0);
+    l = N3.image(S.ctx, "hische_face.png", { name: "Post avatar", cx: -w / 2 + 70, cy: -h / 2 + 70, w: 72, h: 72, fit: "stretch" }); SAT.hang(l, n, -1);
+    l = SAT.text(S, "Jessica Hische", { name: "Post name", x: -w / 2 + 122, cy: -h / 2 + 58, fs: 28, wt: 800, color: MM.C.ink }); SAT.hang(l, n, -1);
+    l = SAT.text(S, "@jessicahische", { name: "Post handle", x: -w / 2 + 122, cy: -h / 2 + 90, fs: 22, wt: 500, color: MM.C.soft }); SAT.hang(l, n, -1);
+    l = SAT.text(S, o.caption || "Proud to share the new Muse mark!", { name: "Post caption", x: -w / 2 + 30, cy: -h / 2 + 150, fs: 26, wt: 600, color: MM.C.ink }); SAT.hang(l, n, -1);
+    l = N3.box(S.ctx, { name: "Post image bg", cx: 0, cy: 40, w: iw, h: ih, r: 18, fill: "#FAF8F4" }); SAT.hang(l, n, -1);
+    if (o.img) { l = N3.image(S.ctx, o.img, { name: "Post image", cx: 0, cy: 40, w: iw, h: ih, fit: "cover", r: 18 }); SAT.hang(l, n, -2); }
+    else { MM.muse(S, n, { name: "Post M", w: iw * 0.6, y: 40, z: -2 }); }
+    l = N3.icon(S.ctx, "heart", { name: "Post heart", cx: -w / 2 + 50, cy: h / 2 - 50, size: 40, color: MM.C.ink, sw: 2.6 }); SAT.hang(l, n, -1);
+    l = N3.icon(S.ctx, "message", { name: "Post comment", cx: -w / 2 + 110, cy: h / 2 - 50, size: 40, color: MM.C.ink, sw: 2.6 }); SAT.hang(l, n, -1);
+    l = N3.icon(S.ctx, "share", { name: "Post share", cx: -w / 2 + 170, cy: h / 2 - 50, size: 40, color: MM.C.ink, sw: 2.6 }); SAT.hang(l, n, -1);
+    return n;
+};
+// Press clipping: off-white paper with a quote and its source, taped on. o: {w, fs, t, from, src}
+MM.clip = function (S, parent, text, x, y, o) {
+    o = o || {};
+    var lines = String(text).split("\n").length, fs = o.fs || 60, lh = fs * 1.2, w = o.w || 1100, h = lines * lh + 200, n, b, l;
+    n = MM.rig(S, "Clipping", parent, [x, y, o.z || -120], o.t || 0, o.from || "up", o);
+    b = N3.box(S.ctx, { name: "Clipping paper", cx: 0, cy: 0, w: w, h: h, r: 4, fill: "#FBF7EE" });
+    LOOK.dropShadow(b, "Soft shadow", { color: "#4A1E28", opacity: 0.3, dist: 22, soft: 50 }); SAT.hang(b, n, 0);
+    l = SAT.text(S, "\u201C", { name: "Clipping quote mark", x: -w / 2 + 50, cy: -h / 2 + 70, fs: 130, wt: 900, color: MM.C.coral }); SAT.hang(l, n, -1);
+    MM.say(S, n, text, { sty: "cap", fs: fs, wt: 800, lh: lh, align: "left", x: -w / 2 + 70, cy: -h / 2 + 110 + lh / 2, after: o.after, z: -1, color: MM.C.ink });
+    if (o.src) { l = SAT.text(S, String(o.src).toUpperCase(), { name: "Clipping source", x: -w / 2 + 70, cy: h / 2 - 48, fs: 24, wt: 800, color: MM.C.soft, ls: 0.1 }); SAT.hang(l, n, -1); }
+    MM.tape(S, n, -w / 2 + 90, -h / 2 + 4, 170, -8, -2); MM.tape(S, n, w / 2 - 90, -h / 2 + 4, 170, 7, -2);
     return n;
 };

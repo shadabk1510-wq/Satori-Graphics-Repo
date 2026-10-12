@@ -16,9 +16,10 @@
 #include "mm_doc.jsx"
 #include "mm_scenes_hook.jsx"
 #include "mm_scenes_a.jsx"
-// chapters 2-5 (mm_scenes_b/c.jsx) are being rebuilt in the v2 style; they join here once the first section is approved
+#include "mm_scenes_b.jsx"
+#include "mm_scenes_c.jsx"
 
-var MM_CONFIG = { duration: 438.3, until: 103.3, vo: ["Vo MEta MUse.mp3", "vo_small.mp3"], only: null };   // until: build the VO up to here (v2 first section); only: ["H1", ...] builds a subset
+var MM_CONFIG = { duration: 438.3, until: null, vo: ["Vo MEta MUse.mp3", "vo_small.mp3"], only: null };   // until: build the VO up to here (v2 first section); only: ["H1", ...] builds a subset
 
 function buildMeta() {
     var here = AEL.scriptDir($.fileName), main, bg, X, i, sc, S, l, failed = [], g0, g1, T, starts = [], vo, f, k, list = [], nx;
