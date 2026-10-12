@@ -66,3 +66,22 @@ below -1 dBFS.
   - generate each sound once and reuse it.
 - This cloud container's proxy denies api.elevenlabs.io. If a result can't be downloaded here, the user downloads it from the flow link into the SFX folder, and add_sfx.jsx picks it up by file name.
 - Scribe word timestamps can replace the local ASR for VO timing (more accurate). It costs credits, so ask first on long recordings.
+
+## 8. SFX over a render the user has already re-edited (Video 4)
+The user changed the edit and rendered it themselves, then asked for SFX as a separate AE project. Tools: `meta_muse/sfx/tools/`.
+- Build cues from the build's own model (`mm_events.py` walks every scene comp: keys + layer markers), then check
+  each cue against their render (`mm_classify.py`), never against the build alone:
+  - Motion: 6x8-cell frame difference of their render at 24 fps; keep a cue only if their picture moves there.
+  - Layout match: correlation of normalised edge images (theirs vs the build preview). It ignores new colours or
+    backgrounds (stays above 0.6) but drops to about 0 on their own inserted shots. A stretch of 1.5 s or more
+    under 0.1 counts as their shot: drop the build cues inside it, and give their cuts in and out a whoosh. If such
+    a stretch runs to the end, that's their outro: leave it silent.
+  - Snap each transition sound so its peak sits on their hard cut, if one is within 0.4 s (check afterwards:
+    median offset +0.01 s).
+- Deliver a script that makes a NEW project:
+  - their render (locked) at the bottom, plus one "SFX (all sounds)" layer on top as the master volume;
+  - the sound files from their own library, placed next to the script;
+  - a pre-mixed SFX stem WAV (mostly silence, so it zips to about 20 %).
+- Check the crest factor (sample peak minus 50 ms peak) for every file. A crest of 25 dB (`click 0.mp3`)
+  clipped the mix once the file was normalised by its 50 ms level, so leave those files out.
+- In a documentary, give body headlines a tick only when no other sound falls within 1 s of it.
