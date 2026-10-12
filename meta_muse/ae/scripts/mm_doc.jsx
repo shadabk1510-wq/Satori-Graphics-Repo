@@ -44,12 +44,7 @@ MM.outT = function (S, tr) {
     else if (tr.how === "whip") { SAT.k(p, E - 0.2, E, [960, 540, 0], [960 - d[0] * 2400, 540 - d[1] * 1500, 0], SAT.IN); }
     else if (tr.how === "zoom") { SAT.zoomThrough(S.M, E, 0.28); }
 };
-// Camera shake on the MASTER's anchor (independent of the transition keys on its position).
-MM.shake = function (S, t, amp, d) {
-    var a = N3.xf(S.M, "ADBE Anchor Point"), k = [[0, 0], [1, -0.6], [-0.8, 0.5], [0.5, 0.7], [-0.3, -0.3], [0, 0]], i, n = k.length;
-    amp = amp || 14; d = d || 0.32;
-    for (i = 0; i < n; i++) { a.setValueAtTime(t + d * i / (n - 1), [k[i][0] * amp, k[i][1] * amp, 0]); }
-};
+MM.shake = function () {};   // the user: no wiggle. Kept as a no-op so old calls stay harmless.
 
 // ---------------------------------------------------------------- type
 // Per-word reveal with a configurable slam: words scale down from s0 %, de-blur and settle on their VO times.
@@ -83,7 +78,7 @@ MM.slam = function (S, parent, text, o) {
     var l = SAT.text(S, o.caps ? String(text).toUpperCase() : text, { name: o.name || ("Slam: " + String(text).replace(/\n/g, " ").substr(0, 30)), x: o.x || 0, cy: o.cy || 0,
         fs: o.fs || 190, wt: o.wt || 900, ls: o.ls === undefined ? -0.045 : o.ls, lh: o.lh, color: o.color || MM.C.ink, align: o.align || "center" }), tms, i;
     tms = o.times || MM.times(S, text, o.after);
-    MM.wordAnim(l, tms, { s0: o.s0 || 180, blur: o.blur || 16, lin: o.lin || 0.2 });
+    MM.wordAnim(l, tms, { s0: Math.min(o.s0 || 130, 130), blur: o.blur || 12, lin: o.lin || 0.3 });
     SAT.hang(l, parent || S.M, o.z || 0);
     if (o.shake) { for (i = 0; i < tms.length; i++) { MM.shake(S, tms[i] + 0.02, o.shake, 0.22); } }
     return l;
@@ -95,7 +90,6 @@ MM.tag = function (S, parent, str, x, y, o) {
     b = N3.box(S.ctx, { name: "Tag bg", cx: 0, cy: 0, w: w, h: h, r: 4, fill: o.bg || "#141014" });
     t = SAT.text(S, String(str).toUpperCase(), { name: "Tag text", x: 0, cy: 0, fs: fs, wt: 800, color: o.color || "#FFFFFF", align: "center", ls: 0.08 });
     SAT.hang(b, n, 0); SAT.hang(t, n, -1);
-    if (o.rot) { N3.xf(n, "ADBE Rotate Z").setValue(o.rot); }
     if (o.t !== undefined) { SAT.k(N3.xf(b, "ADBE Scale"), o.t, o.t + 0.3, [0, 100, 100], [100, 100, 100], SAT.OUT); N3.unitReveal(t, { times: [o.t + 0.1], based: "lines", blur: 2, lin: 0.25 }); N3.xf(b, "ADBE Anchor Point").setValue([-w / 2, 0]); N3.pos(b).setValue([-w / 2, 0, 0]); }
     return n;
 };
@@ -152,7 +146,7 @@ MM.page = function (S, parent, rel, size, o) {
     L = S.comp.layers.add(pc); L.name = nm; L.threeDLayer = true;
     LOOK.dropShadow(L, "Soft shadow", { color: "#4A1E28", opacity: 0.32, dist: 34, soft: 90 });
     N3.parent(L, P); N3.pos(L).setValue([0, 0, 0]);
-    if (o.tilt) { N3.xf(R, "ADBE Orientation").setValue(o.tilt); }
+    if (o.tilt) { N3.xf(R, "ADBE Orientation").setValue([o.tilt[0], o.tilt[1], 0]); }
     return { R: R, P: P, L: img, layer: L, comp: pc, s: s, iw: size[0], ih: size[1], S: S };
 };
 MM.focus = function (pg, t0, t1, px, py, z, inf) {
@@ -220,8 +214,7 @@ MM.react = function (S, parent, text, x, y, o) {
     t = SAT.text(S, "!", { name: "Badge mark", x: -w / 2 + h / 2, cy: 0, fs: h * 0.42, wt: 900, color: "#FFFFFF", align: "center" });
     SAT.hang(b, n, 0); SAT.hang(c, n, -1); SAT.hang(t, n, -2);
     t = SAT.text(S, text, { name: "Reaction text", x: -w / 2 + h + 6, cy: 0, fs: fs, wt: 700, color: MM.C.ink }); SAT.hang(t, n, -1);
-    MM.pop(n, o.t || 0, 0.35);
-    SAT.k(N3.xf(n, "ADBE Rotate Z"), o.t || 0, (o.t || 0) + 0.4, (o.rot || 0) - 12, o.rot || 0, SAT.OUT);
+    MM.pop(n, o.t || 0, 0.4);
     return n;
 };
 

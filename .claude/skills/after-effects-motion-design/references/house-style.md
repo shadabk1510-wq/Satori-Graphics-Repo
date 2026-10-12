@@ -170,3 +170,9 @@ The first Video 4 build was rejected as "presentation-like, slow, dull". Never r
 - **Never leave layout scraps:** half-visible logos, stray credits in corners, elements cutting into each other.
 - **Vary the background** per scene (paper collage, brand world, full-bleed photos, the pink reference gradient). One flat pink for 7 minutes looks static.
 - **Previews at 24 fps or more.** An 8 fps preview hides the motion and reads as frozen.
+- **No wiggle (2026-10-12, the v2 review).**
+  - No camera shakes.
+  - No swinging or rotating pops.
+  - No rotating drifts.
+  - Motion stays smooth: slams are gentle (start at ≤130% scale, settle over ~0.3 s).
+- **Text is always level:** labels, tags, mastheads, logo cards and reaction cards have no Z tilt. Pages may lean in 3D (X/Y) but never roll. Only photos and tape may sit at a slight angle.

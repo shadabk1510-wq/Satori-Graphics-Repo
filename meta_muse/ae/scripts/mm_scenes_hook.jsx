@@ -13,9 +13,8 @@ MM.SCENES.push({ id: "H1", title: "Design job", cue: "She took a design job", ho
     im = N3.image(S.ctx, "hische_cutout.png", { name: "Hische cut-out", cx: 0, cy: 0, w: 760, h: 811, fit: "width" });
     LOOK.dropShadow(im, "Soft shadow", { color: "#5A1020", opacity: 0.35, dist: 24, soft: 60 });
     SAT.hang(im, R, 0);
-    MM.slam(S, S.M, "she took a\ndesign job", { fs: 176, lh: 170, align: "left", x: -880, cy: -150, color: MM.C.ink, shake: 9 });
-    MM.tag(S, S.M, "for Meta", -600, 240, { fs: 62, bg: MM.C.blue, t: S.at("for meta"), rot: -3 });
-    MM.shake(S, S.at("for meta") + 0.05, 12);
+    MM.slam(S, S.M, "she took a\ndesign job", { fs: 176, lh: 170, align: "left", x: -880, cy: -150, color: MM.C.ink });
+    MM.tag(S, S.M, "for Meta", -600, 240, { fs: 62, bg: MM.C.blue, t: S.at("for meta") });
 } });
 
 // H2 "the new Muse logo": straight into Muse's world, the M draws itself.
@@ -24,7 +23,7 @@ MM.SCENES.push({ id: "H2", title: "The new Muse logo", cue: "the new Muse logo",
     MM.bg(S, "muse");
     MM.push(S, 5);
     MM.muse(S, R, { name: "Muse M", w: 1050, draw: [0.02, 0.6], ease: [15, 80] });
-    MM.slam(S, S.M, "the new muse logo", { fs: 120, cy: 380, shake: 8 });
+    MM.slam(S, S.M, "the new muse logo", { fs: 120, cy: 380 });
 } });
 
 // H3 "but she didn't probably expect the kind of": WIRED's own line, underlined as the VO says it.
@@ -44,7 +43,7 @@ MM.SCENES.push({ id: "H3b", title: "Anger escalating", cue: "public reaction of 
     MM.bg(S, "coral");
     MM.push(S, 8);
     t = [S.at("public"), S.at("reaction"), S.at("anger"), S.at("escalating")];
-    for (i = 0; i < R.length; i++) { MM.react(S, S.M, R[i][0], R[i][1], R[i][2], { t: t[i], rot: R[i][3], fs: 46 }); MM.shake(S, t[i] + 0.03, 8); }
+    for (i = 0; i < R.length; i++) { MM.react(S, S.M, R[i][0], R[i][1], R[i][2], { t: t[i], fs: 46 }); }
     MM.burst(S, S.M, S.at("escalating") + 0.15, 10, { cx: 0, cy: 0, r0: 300, r1: 340, s: 110, gap: 0.12, accel: 0.85, seed: 4, z0: 60 });
 } });
 
@@ -53,12 +52,12 @@ MM.SCENES.push({ id: "H4", title: "Photographs", cue: "posting photographs", hoo
     var tb = S.at("online"), a, b, c;
     MM.bg(S, "paper");
     MM.push(S, 7);
-    a = MM.polaroid(S, S.M, -520, -10, -8, 0.0, tb); MM.shake(S, 0.04, 10);
-    b = MM.polaroid(S, S.M, 0, -50, 4, S.at("photographs"), tb + 0.08); MM.shake(S, S.at("photographs") + 0.04, 10);
-    c = MM.polaroid(S, S.M, 520, 0, 9, S.at("house"), tb + 0.16); MM.shake(S, S.at("house") + 0.04, 10);
+    a = MM.polaroid(S, S.M, -520, -10, -8, 0.0, tb);
+    b = MM.polaroid(S, S.M, 0, -50, 4, S.at("photographs"), tb + 0.08);
+    c = MM.polaroid(S, S.M, 520, 0, 9, S.at("house"), tb + 0.16);
     MM.tape(S, a, 0, -180, 160, 6, -5); MM.tape(S, b, 0, -180, 160, -4, -5); MM.tape(S, c, 0, -180, 160, 5, -5);
     MM.ring(S, S.M, 0, -50, 230, 240, S.at("house") + 0.1, { sw: 9 });
-    MM.tag(S, S.M, "her house", 0, 330, { fs: 48, bg: MM.C.alarm, t: S.at("house") + 0.2, rot: -2 });
+    MM.tag(S, S.M, "her house", 0, 330, { fs: 48, bg: MM.C.alarm, t: S.at("house") + 0.2 });
 } });
 
 // H5 "Yeah, people actually went there."
@@ -66,7 +65,7 @@ MM.SCENES.push({ id: "H5", title: "Went there", cue: "Yeah people actually went 
     MM.bg(S, "dark");
     MM.push(S, 6);
     MM.slam(S, S.M, "yeah, people actually", { fs: 80, cy: -200, color: "#F4B8C0", s0: 140 });
-    MM.slam(S, S.M, "went there.", { fs: 330, cy: 70, color: MM.C.coral, shake: 16 });
+    MM.slam(S, S.M, "went there.", { fs: 330, cy: 70, color: MM.C.coral });
 } });
 
 // H6 "According to Wired, Jessica Hische faced personal attacks after sharing her work on the"
@@ -88,7 +87,7 @@ MM.SCENES.push({ id: "H7", title: "Personal AI agent", cue: "identity for Metas 
     MM.bg(S, "muse");
     MM.push(S, 5);
     MM.browser(S, S.M, "web/museai_page.png", { name: "muse.ai", w: 1280, h: 800, url: "muse.ai", x: 180, y: -20, t: 0.05, from: "tiltR", d: 0.6 });
-    MM.tag(S, S.M, "personal AI agent", -560, -120, { fs: 46, bg: MM.C.blue, t: S.at("personal") - 0.05, rot: -2 });
+    MM.tag(S, S.M, "personal AI agent", -560, -120, { fs: 46, bg: MM.C.blue, t: S.at("personal") - 0.05 });
     MM.photo(S, S.M, "web/museai_og.jpg", { name: "Muse mascot", w: 560, h: 294, x: -520, y: 250, z: -40, t: S.at("muse") - 0.15, from: "scale", s0: 1, border: 12, rot: -4, tape: true });
 } });
 
@@ -97,7 +96,7 @@ MM.SCENES.push({ id: "H8", title: "So angry", cue: "But why were some designers"
     MM.bg(S, "coral");
     MM.push(S, 6, S.E - 0.3);
     MM.slam(S, S.M, "but why were some designers", { fs: 92, cy: -250, color: "#FFFFFF", s0: 140 });
-    MM.slam(S, S.M, "so, so very angry?", { fs: 200, cy: 40, color: MM.C.ink, shake: 12 });
+    MM.slam(S, S.M, "so, so very angry?", { fs: 200, cy: 40, color: MM.C.ink });
     var B = [[-760, -380, -14], [790, -350, 10], [-820, 300, 8], [820, 330, -9], [-520, 420, 4], [560, 430, -5], [0, 440, 6]], i, tb = S.at("so") + 0.05;
     for (i = 0; i < B.length; i++) { MM.bubble(S, S.M, B[i][0], B[i][1], 120, tb + i * 0.13, { rot: B[i][2], z: -10 }); }
 } });

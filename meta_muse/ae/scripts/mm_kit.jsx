@@ -165,8 +165,7 @@ MM.bubble = function (S, parent, cx, cy, s, t, o) {
     LOOK.dropShadow(l, "Soft shadow", { color: MM.C.coralD, opacity: 0.3, dist: 12, soft: 30 });
     tx = SAT.text(S, o.glyph || "!", { name: "Bubble mark", x: 0, cy: -s * 0.02, fs: s * 0.62, wt: 900, color: "#FFFFFF", align: "center" });
     SAT.hang(l, n, 0); SAT.hang(tx, n, -1);
-    MM.pop(n, t, 0.4);
-    SAT.k(N3.xf(n, "ADBE Rotate Z"), t, t + 0.55, (o.rot || 0) - 28, o.rot || 0, SAT.OUT);
+    MM.pop(n, t, 0.45);
     return n;
 };
 // A burst of bubbles scattered round a centre, one every `gap` s (accelerating when accel < 1).
@@ -194,7 +193,6 @@ MM.polaroid = function (S, parent, cx, cy, rot, t, tb) {
     SAT.k(N3.xf(bar, "ADBE Scale"), tb, tb + 0.35, [0, 100, 100], [100, 100, 100], SAT.OUT);
     N3.xf(n, "ADBE Rotate Z").setValue(rot);
     MM.pop(n, t, 0.45);
-    SAT.k(N3.xf(n, "ADBE Rotate Z"), t, S.T, rot - 10, rot + 2, [12, 12]);
     return n;
 };
 // Quote card: big coral quote mark, the quote revealed with the VO, attribution under it.

@@ -43,7 +43,7 @@ MM.SCENES.push({ id: "E03", title: "What they asked", cue: "Understanding what t
     hl = MM.ring(S, B, -100, 330, 230, 60, S.at("asked") - 0.1, { sw: 8 });
     MM.say(S, S.M, "what they actually\nasked her to do", { sty: "mid", fs: 70, lh: 80, align: "left", x: 60, cy: -300 });
     MM.face(S, S.M, 260, 120, { d: 240, t: S.at("judge") - 0.2, bw: true });
-    MM.tag(S, S.M, "judge her involvement?", 500, 320, { fs: 40, t: S.at("involvement") - 0.2, rot: -2 });
+    MM.tag(S, S.M, "judge her involvement?", 500, 320, { fs: 40, t: S.at("involvement") - 0.2 });
     MM.slam(S, S.M, "if at all.", { fs: 90, cy: 430, x: 420, color: MM.C.coral, s0: 150, after: S.at("if at") - 0.3 });
 } });
 
@@ -55,7 +55,7 @@ MM.SCENES.push({ id: "E04", title: "Sketch to refined", cue: "So the company alr
     LOOK.dropShadow(pg, "Soft shadow", { color: "#4A1E28", opacity: 0.22, dist: 24, soft: 70 }); SAT.hang(pg, P, 0);
     for (i = 0; i < 9; i++) { l = N3.box(S.ctx, { name: "Rule " + (i + 1), cx: 0, cy: -320 + i * 80, w: 1120, h: 2, fill: "#E8DCDC" }); SAT.hang(l, P, -1); }
     sk = MM.muse(S, P, { name: "Meta sketch", w: W, color: MM.C.sketch, sw: 30, v: MM.SKETCH, draw: [S.at("sketch") - 0.3, S.at("logo") + 0.2], ease: [25, 70], z: -2 });
-    MM.tag(S, P, "Meta's initial sketch", -330, -330, { fs: 34, t: S.at("initial") - 0.2, rot: -3 });
+    MM.tag(S, P, "Meta's initial sketch", -330, -330, { fs: 34, t: S.at("initial") - 0.2 });
     SAT.k(N3.xf(P, "ADBE Scale"), S.at("and what many") - 0.1, S.at("hishs") + 0.2, [100, 100, 100], [112, 112, 112], [50, 80]);   // lean in
     MM.face(S, S.M, 640, 220, { d: 230, t: S.at("hishs") - 0.15, name: "Hische", role: "refined it", side: "left" });
     MM.morph(sk, W, tr - 0.1, tr + 0.9, MM.SKETCH, {}, SAT.SNAP);
@@ -97,8 +97,8 @@ MM.SCENES.push({ id: "E06", title: "Comparisons", cue: "Because some people did 
     MM.focus(pg, 0.2, 1.4, 1170, 920, 1.0);
     MM.hl(pg, [Q.head1, Q.head2], S.at("comparisons") - 0.1, S.at("logo") + 0.2);
     MM.away(pg.R, te - 0.45, "up", 0.45);   // the page clears the frame, then the two logos own it
-    MM.photo(S, S.M, "logo_mural_arts_crop.png", { name: "Mural Arts logo", w: 680, h: 486, x: -390, y: 10, z: -60, t: te - 0.25, from: "up", off: 900, border: 14, rot: -3, tape: true });
-    MM.photo(S, S.M, "logo_muse_crop.png", { name: "Muse logo", w: 680, h: 486, x: 390, y: 10, z: -60, t: te - 0.05, from: "up", off: 900, border: 14, rot: 3, tape: true });
+    MM.photo(S, S.M, "logo_mural_arts_crop.png", { name: "Mural Arts logo", w: 680, h: 486, x: -390, y: 10, z: -60, t: te - 0.25, from: "up", off: 900, border: 14, tape: true });
+    MM.photo(S, S.M, "logo_muse_crop.png", { name: "Muse logo", w: 680, h: 486, x: 390, y: 10, z: -60, t: te - 0.05, from: "up", off: 900, border: 14, tape: true });
     MM.tag(S, S.M, "Mural Arts Philadelphia", -390, 330, { fs: 30, t: te + 0.25 });
     MM.tag(S, S.M, "Meta Muse", 390, 330, { fs: 30, bg: MM.C.blue, t: te + 0.4 });
     MM.slam(S, S.M, "\u2248", { fs: 160, cy: 0, color: MM.C.coral, times: [te + 0.3], z: -90 });
@@ -154,8 +154,8 @@ MM.SCENES.push({ id: "E08", title: "In her words", cue: "But in her words", tin:
     MM.push(S, 4);
     MM.face(S, S.M, -520, 40, { d: 420, t: 0.05, bw: true });
     MM.slam(S, S.M, "\u201Cin her words\u201D", { fs: 110, x: 230, cy: -260, s0: 150, color: MM.C.ink });
-    MM.photo(S, S.M, "sourced/inquirer_masthead_clean.png", { name: "Inquirer masthead", w: 900, h: 155, x: 260, y: 20, z: -20, t: S.at("philadelphia") - 0.3, from: "right", border: 18, rot: -2, tape: true });
-    MM.tag(S, S.M, "a local newspaper", 260, 230, { fs: 40, bg: MM.C.coral, t: S.at("local") - 0.1, rot: 2 });
+    MM.photo(S, S.M, "sourced/inquirer_masthead_clean.png", { name: "Inquirer masthead", w: 900, h: 155, x: 260, y: 20, z: -20, t: S.at("philadelphia") - 0.3, from: "right", border: 18, tape: true });
+    MM.tag(S, S.M, "a local newspaper", 260, 230, { fs: 40, bg: MM.C.coral, t: S.at("local") - 0.1 });
 } });
 
 // E08b "that the Meta sketch was based on a pen stroke or just a mere kind of scribble."
@@ -166,7 +166,7 @@ MM.SCENES.push({ id: "E08b", title: "A pen stroke", cue: "that the meta sketch w
     MM.muse(S, R, { name: "Pen stroke", w: 1150, color: MM.C.sketch, sw: 14, v: { tension: 1.35, slant: 0.18, amp: 0.95 }, draw: [S.at("pen") - 0.2, S.at("scribble") + 0.3], ease: [15, 55] });
     MM.slam(S, S.M, "a pen stroke", { fs: 110, x: -460, cy: -360, s0: 150, after: S.at("pen") - 0.4 });
     MM.slam(S, S.M, "a mere scribble", { fs: 110, x: 420, cy: 400, s0: 150, color: MM.C.coral, after: S.at("mere") - 0.4 });
-    MM.tag(S, S.M, "Meta's sketch", 640, -360, { fs: 34, t: S.at("meta sketch") - 0.1, bg: MM.C.blue, rot: 3 });
+    MM.tag(S, S.M, "Meta's sketch", 640, -360, { fs: 34, t: S.at("meta sketch") - 0.1, bg: MM.C.blue });
 } });
 
 // E09 "She then went on to adjust the stroke angles, the endings, and the rhythm of the design itself"
