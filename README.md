@@ -12,6 +12,7 @@ After Effects projects built as native, editable layers from ExtendScript (`.jsx
 | `noon_ae/ae/scripts/style/` | NOON style test: the glass look and 3D camera on one moment (8:22) |
 | `style_lab/` | **Aurelo** style lab: a separate 2-minute test film (fictional app) for the new look. See `style_lab/README.md` |
 | `satori_lab/` | **Satori lab**: a 30 s sample in the user's own style (Tallyo, fictional), built from their scene breakdowns. See `satori_lab/README.md` |
+| `meta_muse/` | **Video 4, "New Meta Logo"** (Meta Muse / Jessica Hische): a 7:18 commentary video locked to the VO. See `meta_muse/README.md` |
 
 Client assets, voice-overs, renders and package zips are kept out of git (see `.gitignore`).
 
@@ -30,7 +31,8 @@ Client assets, voice-overs, renders and package zips are kept out of git (see `.
   - The 30 s sample is approved overall.
   - v2 adds the hold-drift rule: every held frame keeps moving the way it came in (see `references/house-style.md`).
   - The Satori reference videos (Drive: `Satori Video Refrence`) are broken down in `references/house-style.md`: palettes, VO-synced visuals, glass cards, 3D screen recordings.
-  - **Next:** the per-video folders (VO, ideas, PNG assets) on Drive, once the user says they're ready.
+  - Per-video folders on Drive (VO, materials, asset requirements) start each project.
+- **Video 4 (Meta Muse):** first full build delivered (60 scenes, coral-pink reference 1 palette); waiting on the user's render and notes.
 - **ElevenLabs:** the restricted connector is connected (SFX, TTS, transcription; no music). Credit rules are in the skill's `references/sfx-workflow.md` § 7.
 
 ## Working rules

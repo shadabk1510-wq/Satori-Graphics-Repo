@@ -70,6 +70,14 @@
     if (t >= K[K.length - 1].t) return K[K.length - 1].v;
     let i = 0; while (t >= K[i + 1].t) i++;
     const a = K[i], b = K[i + 1], dt = b.t - a.t;
+    if (p.type === PVT.SHAPE && a.outI !== KIT.HOLD && a.v && b.v && a.v.v && b.v.v && a.v.v.length === b.v.v.length) {
+      // path morph: one temporal ease drives vertices and tangents together
+      const E1 = (k, side) => { const e = side === "o" ? k.outE : k.inE; return e ? e[0] : { s: 0, i: 33.333 }; };
+      const lin1 = { s: 1 / dt, i: 33.333 };
+      const u = bez1(t, a.t, b.t, 0, 1, a.outI === KIT.LINEAR ? lin1 : E1(a, "o"), b.inI === KIT.LINEAR ? lin1 : E1(b, "i"));
+      const L = (A, B) => A.map((q, j) => lerpV(q, B[j] || q, u));
+      return { v: L(a.v.v, b.v.v), i: L(a.v.i, b.v.i), o: L(a.v.o, b.v.o), c: a.v.c };
+    }
     if (a.outI === KIT.HOLD || p.type === PVT.SHAPE || p.type === PVT.TEXT_DOCUMENT) return a.v;
     const spatial = p.type === PVT.ThreeD_SPATIAL || p.type === PVT.TwoD_SPATIAL;
     // spatial bezier: keys with non-zero spatial tangents move along the curve P0, P0+outT, P1+inT, P1 (by arc length)

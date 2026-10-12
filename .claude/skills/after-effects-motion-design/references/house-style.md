@@ -131,3 +131,13 @@ These are two finished Satori Graphics videos. They are the target for **look, c
 5. **UI and screen recordings live in 3D:** tilted planes, a laptop push-in, and camera pushes to the detail. Callouts slide in from the edge.
 6. **Motion:** motion-blurred whips and zooms for emphasis; the circular-text badge, the word roller and the canvas grid with corner dots as signature pieces.
 7. **Holds:** the reference screen-recording section has 0.5–1.3 s fully still stretches (about 73 s of the 3 min). Under the hold-drift rule above, **never leave those still**: give every recording a slow push or tilt drift.
+
+## Per-video colour reference (the user's rule, 2026-10-12)
+- The user names the colour reference for each video. Video 4 ("New Meta Logo") uses reference 1's coral-pink world:
+  - blush → coral gradient light;
+  - white cards with a warm shadow (`#B8485C` tint);
+  - plum `#33222A` and coral `#DE4E5F` type;
+  - a deeper red `#D93448` for alarm bubbles.
+- The subject's own brand colour stays only on the subject (the Meta blue M).
+- The thumbnail sets the editorial pieces (big lowercase heavy type, cut-out, "!" bubbles), not the palette.
+- Lock visuals to the VO: transcribe it with word times, cue each scene on a VO phrase, and reveal caption words on their spoken time (Video 4's `MM.say` / `MM.times`).

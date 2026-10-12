@@ -18,3 +18,9 @@ AURELO_*_package.zip
 satori_lab/ae/*.aep
 SATORI_*_package.zip
 SATORI_*preview*.mp4
+
+# Video 4 (Meta Muse): sourced press images, VO and packages stay out of git
+meta_muse/assets/
+meta_muse/ae/*.aep
+META_*_package.zip
+META_*preview*.mp4

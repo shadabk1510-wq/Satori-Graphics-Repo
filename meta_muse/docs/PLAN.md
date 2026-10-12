@@ -8,7 +8,10 @@
 
 The VO file is 17.5 MB, too big for the Drive connection, so the timings below are estimates until a compressed copy arrives.
 
-## Look (from the thumbnail)
+## Look
+**Update (2026-10-12):** the user asked for reference 1's colours (coral-pink) for this video. The build uses blush-to-coral light, white cards and plum/coral type; the thumbnail still sets the editorial pieces. The palette list below was the first draft.
+
+### First draft (from the thumbnail)
 - **Paper** `#FEFBF2` (warm off-white), full frame, with a faint paper grain. This is one continuous background: the editorial world.
 - **Ink** `#080707`: huge heavy lowercase grotesk headlines ("too far?"). Labels are bold sans ("Meta Muse").
 - **Meta blue scribble M:** a thick round-capped stroke, blue gradient `#0064E0` → `#1A8CFF`. Built as a native shape path so it can **draw on** (Trim Paths) and **morph** (sketch → variations → final).
