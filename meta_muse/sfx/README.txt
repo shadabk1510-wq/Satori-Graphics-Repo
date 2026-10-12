@@ -5,20 +5,22 @@ This is a separate After Effects project that lays the sound effects over the vi
 Your own project is not opened or changed.
 
 WHAT'S IN THIS FOLDER
-  MM_SFX_project.jsx         The script that builds the SFX project. Run this one.
-  mm_sfx_cues.jsx            The 227 cue times, one line each. You can edit them as text.
-  ae_lib.jsx                 Helper library the script needs.
+  MM_SFX_project.jsx         The script that builds the SFX project, all in one file. The 227 cue times
+                             are inside it, one line each, if you ever want to edit them as text.
   SFX/                       24 sounds from your NOON_SFX library. Nothing new was bought or generated.
   META_Video4_SFX_stem.wav   All the sounds already mixed as one 48 kHz WAV (no VO), 7:18.27, starting at 0:00.
                              Use this if you would rather drop the SFX straight into your edit.
 
 HOW TO BUILD IT
-  1. Keep this folder together. You can also copy your rendered video (.mp4/.mov) into it.
+  1. UNZIP the whole folder first (right-click > Extract All). Running the script from inside the zip
+     does not work, because AE can't see the SFX folder. You can also copy your rendered video
+     (.mp4/.mov) into the unzipped folder.
   2. In After Effects, go to File > Scripts > Run Script File... and pick MM_SFX_project.jsx.
        - If your video is not in this folder, the script asks you to pick it.
        - The script starts a new project. AE asks whether to save the open one first, as usual.
   3. The script saves META_Video4_SFX.aep in this folder. If that file already exists, it saves _v002, _v003
      and so on instead of overwriting.
+  4. If something goes wrong, a message says which step stopped and why. Send me a screenshot of it.
 
 WHAT THE PROJECT CONTAINS
   Comp "META_Video4_SFX" (same size, fps and length as your render):
