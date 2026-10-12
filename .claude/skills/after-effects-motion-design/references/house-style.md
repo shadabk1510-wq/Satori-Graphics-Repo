@@ -141,3 +141,32 @@ These are two finished Satori Graphics videos. They are the target for **look, c
 - The subject's own brand colour stays only on the subject (the Meta blue M).
 - The thumbnail sets the editorial pieces (big lowercase heavy type, cut-out, "!" bubbles), not the palette.
 - Lock visuals to the VO: transcribe it with word times, cue each scene on a VO phrase, and reveal caption words on their spoken time (Video 4's `MM.say` / `MM.times`).
+
+## Hard rules from the Video 4 review (the user, 2026-10-12): read before every build
+The first Video 4 build was rejected as "presentation-like, slow, dull". Never repeat these:
+- **No opacity crossfades between scenes. Ever.** Transitions are:
+  - directional pushes (the old frame slides out as the new one slides in, with motion blur);
+  - whip pans;
+  - zoom-throughs;
+  - match cuts;
+  - hard cuts on the beat.
+  A frame never fades out while the next one fades in, and the screen is never blank or empty.
+- **Storytelling, not SaaS:**
+  - Use real images wherever possible: photos of the people, their work and places, real article pages, real brand assets.
+  - Icons only as small accents, never as the main visual. Show the shop, the staff and the person, not a shop icon.
+- **Articles get the documentary treatment (Vox / Johnny Harris):**
+  - the full page on a 3D plane over paper;
+  - the camera pushes to the quoted line;
+  - a highlighter sweeps across it in sync with the VO, and the rest dims;
+  - red pen circles and underlines;
+  - tape and torn paper edges.
+- **Pacing:**
+  - The hook is a "banger": bold kinetic type with the subject's branding in the first 2–3 s.
+  - After the hook a new visual still lands every ~2–3 s. Calm means smooth, not slow.
+  - No held frame longer than ~3 s without a new element.
+- **Show the person** whenever the VO talks about them: a cut-out, a photo in a circle, or a photo card.
+- **Numbers pop in at their final value**, or count with the number already visible. Never show "0" waiting.
+- **Group everything that moves together** (an icon on a card is parented to the card).
+- **Never leave layout scraps:** half-visible logos, stray credits in corners, elements cutting into each other.
+- **Vary the background** per scene (paper collage, brand world, full-bleed photos, the pink reference gradient). One flat pink for 7 minutes looks static.
+- **Previews at 24 fps or more.** An 8 fps preview hides the motion and reads as frozen.
