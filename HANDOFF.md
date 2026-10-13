@@ -2,7 +2,7 @@
 
 **Prepared:** 2026-10-13, from the cloud session that built everything below.
 **Your local root:** `D:\EYDIT\Satori Graphic`
-**Repository:** `shadabk1510-wq/Video-project-1`, branch `claude/after-effects-code-skills-bh5k75` (52+ commits, everything pushed)
+**Repository:** `shadabk1510-wq/Satori-Graphics-Repo` (renamed on GitHub from `Video-project-1`; the old address still redirects), branch `claude/after-effects-code-skills-bh5k75`. Everything is pushed.
 
 This file is the complete record. It covers:
 - every project, script, tool, rule and preference we set up;
@@ -42,9 +42,9 @@ D:\EYDIT\Satori Graphic\
 **With git instead of zip 1** (recommended, so you can pull future changes):
 ```powershell
 cd "D:\EYDIT\Satori Graphic"
-git clone -b claude/after-effects-code-skills-bh5k75 https://github.com/shadabk1510-wq/Video-project-1.git
+git clone -b claude/after-effects-code-skills-bh5k75 https://github.com/shadabk1510-wq/Satori-Graphics-Repo.git Video-project-1
 ```
-Then extract zips 2–4 over it. They contain only files git ignores, so they don't clash.
+The last word keeps the folder name `Video-project-1`, so the asset zips line up. Then extract zips 2–4 over it. They contain only files git ignores, so they don't clash.
 
 Nothing in the zips is a program that runs by itself. The `.jsx` files run only when you start them from After Effects.
 
