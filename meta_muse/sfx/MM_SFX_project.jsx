@@ -291,8 +291,11 @@
             f = new Folder(here().fsName + "/" + names[i]);
             if (f.exists) { return f; }
         }
-        f = new Folder("D:/AE Assets/3. sfx/NOON_SFX");
-        if (f.exists) { return f; }
+        names = ["D:/EYDIT/Satori Graphic/SFX/NOON_SFX", "D:/AE Assets/3. sfx/NOON_SFX"];   // your library, if it lives there
+        for (i = 0; i < names.length; i++) {
+            f = new Folder(names[i]);
+            if (f.exists) { return f; }
+        }
         alert("Video 4 SFX: there is no \"SFX\" folder next to this script:\n" + here().fsName +
             "\n\nUnzip the whole META_Video4_SFX folder first (don't run the script from inside the zip).\n" +
             "Next you can point to the folder with the sound files yourself.");

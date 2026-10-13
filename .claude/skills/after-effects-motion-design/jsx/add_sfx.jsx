@@ -16,7 +16,7 @@
 
 var SFX = {
     // first folder that exists is used; otherwise you are asked to pick it
-    folders: ["D:/AE Assets/3. sfx/NOON_SFX", "../assets/_ae/sfx"],
+    folders: ["D:/EYDIT/Satori Graphic/SFX/NOON_SFX", "D:/AE Assets/3. sfx/NOON_SFX", "../assets/_ae/sfx"],
     main: "NOON3_MAIN",
     comp: "NOON3 SFX",
     // For each sound: db = how loud its peak sits in the mix (dBFS; the voice-over peaks around -15 to -19),

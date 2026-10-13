@@ -2,6 +2,8 @@
 
 After Effects projects built as native, editable layers from ExtendScript (`.jsx`), plus the Claude Code skill and tools behind them.
 
+**Moving to your PC or starting a new session? Read `HANDOFF.md` first.** `CLAUDE.md` gives Claude Code the context.
+
 ## Layout
 
 | Folder | What it is |
@@ -12,7 +14,8 @@ After Effects projects built as native, editable layers from ExtendScript (`.jsx
 | `noon_ae/ae/scripts/style/` | NOON style test: the glass look and 3D camera on one moment (8:22) |
 | `style_lab/` | **Aurelo** style lab: a separate 2-minute test film (fictional app) for the new look. See `style_lab/README.md` |
 | `satori_lab/` | **Satori lab**: a 30 s sample in the user's own style (Tallyo, fictional), built from their scene breakdowns. See `satori_lab/README.md` |
-| `meta_muse/` | **Video 4, "New Meta Logo"** (Meta Muse / Jessica Hische): a 7:18 commentary video locked to the VO. See `meta_muse/README.md` |
+| `meta_muse/` | **Video 4, "New Meta Logo"** (Meta Muse / Jessica Hische): a 7:18 documentary-style commentary locked to the VO (v2). See `meta_muse/README.md` |
+| `meta_muse/sfx/` | Video 4 sound effects: a separate AE project over the user's own re-edited render (227 cues) |
 
 Client assets, voice-overs, renders and package zips are kept out of git (see `.gitignore`).
 
@@ -32,7 +35,10 @@ Client assets, voice-overs, renders and package zips are kept out of git (see `.
   - v2 adds the hold-drift rule: every held frame keeps moving the way it came in (see `references/house-style.md`).
   - The Satori reference videos (Drive: `Satori Video Refrence`) are broken down in `references/house-style.md`: palettes, VO-synced visuals, glass cards, 3D screen recordings.
   - Per-video folders on Drive (VO, materials, asset requirements) start each project.
-- **Video 4 (Meta Muse):** first full build delivered (60 scenes, coral-pink reference 1 palette); waiting on the user's render and notes.
+- **Video 4 (Meta Muse):**
+  - v1 was rejected; the v2 documentary rebuild (64 scenes) was approved with fixes;
+  - the user re-edited and rendered it;
+  - the SFX project over their render was delivered: v2 of the script is self-contained, but not yet confirmed in their AE.
 - **ElevenLabs:** the restricted connector is connected (SFX, TTS, transcription; no music). Credit rules are in the skill's `references/sfx-workflow.md` § 7.
 
 ## Working rules
