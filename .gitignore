@@ -24,3 +24,6 @@ meta_muse/assets/
 meta_muse/ae/*.aep
 META_*_package.zip
 META_*preview*.mp4
+
+# handoff zips for the move to the local PC
+SatoriGraphic_Handoff_*.zip
